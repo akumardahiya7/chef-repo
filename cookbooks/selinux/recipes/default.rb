@@ -18,16 +18,20 @@
 
 selinux_install 'selinux os prep'
 
-selinux_state "SELinux #{node['selinux']['status'].capitalize}" do
-  action node['selinux']['status'].downcase.to_sym
-end
+#selinux_state "SELinux #{node['selinux']['status'].capitalize}" do
+#  action node['selinux']['status'].downcase.to_sym
+#end
 
-node['selinux']['booleans'].each do |boolean, value|
-  value = SELinuxServiceHelpers.selinux_bool(value)
-  next if value.nil?
-  script "boolean_#{boolean}" do
-    interpreter 'bash'
-    code "setsebool -P #{boolean} #{value}"
-    not_if "getsebool #{boolean} |egrep -q \" #{value}\"$"
-  end
+#node['selinux']['booleans'].each do |boolean, value|
+#  value = SELinuxServiceHelpers.selinux_bool(value)
+#  next if value.nil?
+#  script "boolean_#{boolean}" do
+#    interpreter 'bash'
+#    code "setsebool -P #{boolean} #{value}"
+#    not_if "getsebool #{boolean} |egrep -q \" #{value}\"$"
+#  end
+#end
+
+selinux_state "SELinux Permissive" do
+  action :permissive
 end
