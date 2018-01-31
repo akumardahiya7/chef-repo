@@ -1,0 +1,32 @@
+# Configuration snippets may be placed in this directory as well
+includedir /etc/krb5.conf.d/
+
+[logging]
+ default = FILE:/var/log/krb5libs.log
+ kdc = FILE:/var/log/krb5kdc.log
+ admin_server = FILE:/var/log/kadmind.log
+
+[libdefaults]
+ default_realm = <%= node['kerberos_realm'] %>
+ default_tgs_enctypes = aes256-cts aes128-cts arcfour-hmac-md5 des-cbc-md5 des-cbc-crc
+ default_tkt_enctypes = aes256-cts aes128-cts arcfour-hmac-md5 des-cbc-md5 des-cbc-crc
+ permitted_enctypes = aes256-cts aes128-cts arcfour-hmac-md5 des-cbc-md5 des-cbc-crc
+ dns_lookup_realm = true
+ dns_lookup_kdc = true
+ passwd_check_s_address = false
+ noaddresses = true
+ udp_preference_limit = 1
+ ccache_type = 3
+ kdc_timesync = 0
+ kdc_timesync = 0
+ renew_lifetime = 1d
+
+[realms]
+ <%= node['kerberos_realm'] %> = {
+  kdc = <%= node['master_node'] %>
+  admin_server = <%= node['master_node'] %>
+ }
+
+[domain_realm]
+ <%= node['master_node'] %> = <%= node['kerberos_realm'] %>
+ localhost = <%= node['kerberos_realm'] %>

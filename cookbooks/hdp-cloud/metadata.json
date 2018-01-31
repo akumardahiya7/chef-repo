@@ -1,0 +1,56 @@
+{
+  "name": "hdp-cloud",
+  "description": "Installs/Configures hdp-cloud",
+  "long_description": "Installs/Configures hdp-cloud",
+  "maintainer": "Eric Krenz",
+  "maintainer_email": "eric.krenz@target.com",
+  "license": "All Rights Reserved",
+  "platforms": {
+
+  },
+  "dependencies": {
+    "selinux": ">= 0.0.0",
+    "autofs": ">= 0.0.0",
+    "nfs": ">= 0.0.0",
+    "yum": ">= 0.0.0",
+    "line": ">= 0.0.0",
+    "entropy": ">= 0.0.0"
+  },
+  "recommendations": {
+
+  },
+  "suggestions": {
+
+  },
+  "conflicting": {
+
+  },
+  "providing": {
+
+  },
+  "replacing": {
+
+  },
+  "attributes": {
+
+  },
+  "groupings": {
+
+  },
+  "recipes": {
+
+  },
+  "version": "1.0.0",
+  "source_url": "",
+  "issues_url": "",
+  "privacy": false,
+  "chef_versions": [
+
+  ],
+  "ohai_versions": [
+
+  ],
+  "gems": [
+
+  ]
+}

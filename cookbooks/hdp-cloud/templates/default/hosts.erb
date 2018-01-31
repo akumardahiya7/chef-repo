@@ -1,0 +1,9 @@
+127.0.0.1   localhost.localdomain localhost
+
+<% @hosts.each do |hostname, host| %>
+<% if hostname == node['hostname'] %>
+<%= "#{node['ipaddress']}   #{hostname}#{node['domain']} #{hostname}" %>
+<% else %>
+<%= "#{host['internal_ip']}  #{hostname}#{node['domain']} #{hostname}" %>
+<% end %>
+<% end %>

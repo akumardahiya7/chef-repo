@@ -1,0 +1,32 @@
+# Base LDIF Entry
+dn: dc=redstack,dc=com
+objectClass: dcObject
+objectClass: organization
+dc: redstack
+o : redstack
+
+# Entry for a sample people container
+dn: ou=people,dc=redstack,dc=com
+objectclass:top
+objectclass:organizationalUnit
+ou: people
+
+<% @users.each do |user| %>
+
+# Entry for <%= "#{user['id']}" %>
+dn: uid=<%= "#{user['id']}" %>,ou=people,dc=redstack,dc=com
+objectclass:top
+objectclass:person
+objectclass:organizationalPerson
+objectclass:posixAccount
+objectclass:shadowAccount
+cn: <%= "#{user['id']}" %>
+sn: <%= "#{user['id']}" %>
+uid: <%= "#{user['id']}" %>
+userPassword: <%= "#{user['password']}" %>
+uidNumber: <%= "#{user['uid']}" %>
+gidNumber: 1051
+loginShell: /bin/bash
+homeDirectory: /user_items/home/<%= "#{user['id']}" %>/
+
+<% end %>

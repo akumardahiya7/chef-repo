@@ -1,0 +1,74 @@
+---
+driver:
+  openstack_username: <%= ENV['OS_USERNAME'] %>
+  openstack_api_key: <%= ENV['OS_PASSWORD'] %>
+  openstack_auth_url: <%= ENV['OS_AUTH_URL'] %>/tokens
+  openstack_tenant: <%= ENV['OS_TENANT_NAME'] %>
+  key_name: <%= ENV['OS_USERNAME'] %>_openstack
+
+provisioner:
+  name: chef_zero
+  chef_omnibus_url: http://www.getchef.com/chef/install.sh
+  require_chef_omnibus: 12.12.15
+
+platforms:
+  - name: openstack
+    transport:
+      username: centos
+      ssh_key: /Users/<%= ENV['USER'] %>/.ssh/id_rsa
+      name: ssh
+    driver:
+      name: openstack
+      flavor_ref: lmem-8vcpu
+      image_ref: centos-7-latest
+      floating_ip_pool: ext_vlan1773_net
+      #availability_zone: chassis3
+
+suites:
+  - name: master
+    driver:
+      vm_hostname: rs-master
+      server_name: rs-master
+      block_device_mapping:
+        make_volume: true
+        device_name: vdb
+        volume_size: 105
+        availability_zone: nova
+        delete_on_termination: true
+    run_list:
+      - recipe[tgt-certs-simplified::chef]
+      - recipe[hdp-cloud::disk]
+      - recipe[hdp-cloud::os]
+      - recipe[hdp-cloud::kerberos-client]
+      - recipe[hdp-cloud::kerberos-server]
+      - recipe[hdp-cloud::nfs-server]
+      - recipe[hdp-cloud::ldap-client]
+      - recipe[hdp-cloud::ldap-server]
+       #- recipe[hdp-cloud::nfs-client]
+      - recipe[hdp-cloud::local-users]
+      - recipe[hdp-cloud::ambari-client]
+      - recipe[hdp-cloud::ambari-server]
+    attributes:
+
+  - name: data
+    driver:
+      vm_hostname: redstackdat1
+      server_name: redstackdat1
+      block_device_mapping:
+        make_volume: true
+        device_name: vdb
+        volume_size: 105
+        availability_zone: nova
+        delete_on_termination: true
+    run_list:
+       - recipe[tgt-certs-simplified::chef]
+       - recipe[tgt-certs-simplified::openssl]
+       - recipe[hdp-cloud::runtime]
+       - recipe[hdp-cloud::disk]
+       - recipe[hdp-cloud::hosts]
+       - recipe[hdp-cloud::os]
+       - recipe[hdp-cloud::local-users]
+       - recipe[hdp-cloud::nfs-client]
+       - recipe[hdp-cloud::kerberos-client]
+       - recipe[hdp-cloud::ambari-client]
+    attributes:
