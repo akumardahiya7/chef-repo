@@ -10,5 +10,5 @@ package 'firewalld'
 #  action [:enable, :start]
 #end
 service 'firewalld' do
-  action [:disable, :start]
+  action [:disable, :stop]
 end
