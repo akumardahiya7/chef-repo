@@ -1,0 +1,13 @@
+127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
+::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
+
+192.166.4.235 anil-en
+192.166.4.207 host-192-166-4-207
+
+192.166.4.221 anil-sn-1
+192.166.4.234 anil-sn-2
+192.166.4.230 anil-sn-3
+
+192.166.4.211 anil-mn-1
+192.166.4.213 anil-mn-2
+192.166.4.215 anil-mn-3
