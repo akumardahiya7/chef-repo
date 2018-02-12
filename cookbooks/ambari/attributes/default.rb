@@ -72,7 +72,7 @@ when '2.6', '2.6.0'
   node.default['ambari']['rhel_7_repo'] = 'http://public-repo-1.hortonworks.com/ambari/centos7/2.x/updates/2.6.0.0/ambari.repo'
 end
 
-node.default['ambari']['server_fqdn'] = 'anil-hdp-en.hashmap.net'
+#node.default['ambari']['server_fqdn'] = 'anil-hdp-en.hashmap.net'
 node.default['ambari']['admin_user'] = 'admin'
 node.default['ambari']['admin_password'] = 'admin'
 
