@@ -1,4 +1,8 @@
 
+
+#ambar-server
+ambari-server stop
+
 #Run python script on all cluster nodes
 touch /var/lib/ambari-agent/data/hostcheck_custom_actions.result
 python /usr/lib/python2.6/site-packages/ambari_agent/HostCleanup.py --silent
@@ -19,9 +23,8 @@ rm -rf /usr/lib/python2.6/site-packages/ambari*
 
 
 #ambar-server
-ambari-server stop
+#ambari-server stop
 ambari-server reset
-ambari-agent stop
 yum -y erase ambari-server
  
 rm -rf /var/lib/ambari-server
