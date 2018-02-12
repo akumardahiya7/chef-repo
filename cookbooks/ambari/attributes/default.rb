@@ -6,7 +6,8 @@
 # node.default['ambari']['server_fqdn'] = 'localhost'
 
 # Set default version of Ambari.  Overwrite this to install a different version.
-node.default['ambari']['version'] = '2.2.1'
+#node.default['ambari']['version'] = '2.2.1'
+node.default['ambari']['version'] = '2.6.0'
 
 case node['ambari']['version']
 when '1.7'
@@ -67,8 +68,11 @@ when '2.4', '2.4.2', '2.4.2.0'
   node.default['ambari']['ubuntu_12_repo'] = 'http://public-repo-1.hortonworks.com/ambari/ubuntu12/2.x/updates/2.4.2.0'
   node.default['ambari']['ubuntu_14_repo'] = 'http://public-repo-1.hortonworks.com/ambari/ubuntu14/2.x/updates/2.4.2.0'
   node.default['ambari']['debian_7_repo'] = 'http://public-repo-1.hortonworks.com/ambari/debian7/2.x/updates/2.4.2.0'
+when '2.6', '2.6.0'
+  node.default['ambari']['rhel_7_repo'] = 'http://public-repo-1.hortonworks.com/ambari/centos7/2.x/updates/2.6.0.0/ambari.repo'
 end
 
+node.default['ambari']['server_fqdn'] = 'anil-hdp-en.hashmap.net'
 node.default['ambari']['admin_user'] = 'admin'
 node.default['ambari']['admin_password'] = 'admin'
 
