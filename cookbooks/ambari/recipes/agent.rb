@@ -22,6 +22,7 @@ include_recipe 'ambari::setup_package_manager'
 
 package 'ambari-agent'
 
+
 directory '/etc/ambari-agent/conf.chef' do
   owner 'root'
   group 'root'
@@ -69,6 +70,10 @@ ambari_server_fqdn =
     end
   end
 
+execute 'create_dir' do 
+ command 'mkdir -p /etc/ambari-agent/conf'
+end
+
 template '/etc/ambari-agent/conf/ambari-agent.ini' do
   source 'ambari-agent.ini.erb'
   mode 0o755
@@ -77,7 +82,12 @@ template '/etc/ambari-agent/conf/ambari-agent.ini' do
   variables(ambari_server_fqdn: ambari_server_fqdn)
 end
 
+
 service 'ambari-agent' do
   supports :status => true, :restart => true, :reload => false
   action [:enable, :start]
 end
+
+#execute 'start_agent' do 
+# command 'service ambari-agent start'
+#end
