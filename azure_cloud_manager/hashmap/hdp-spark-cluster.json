@@ -125,7 +125,7 @@
                 },
                 {
                     "name": "SPARK_THRIFTSERVER"
-                }
+                },
 		{
                     "name": "ZEPPELIN_MASTER"
                 },
@@ -214,7 +214,7 @@
         }
     ],
     "Blueprints": {
-        "blueprint_name": "walgreens-hdp-spark-cluster",
+        "blueprint_name": "hdp-spark-cluster",
         "stack_name": "HDP",
         "stack_version": "2.6"
     }

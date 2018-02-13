@@ -1,5 +1,5 @@
 {
-  "blueprint" : "hdp-spark-2",
+  "blueprint" : "hdp-spark-cluster",
   "default_password" : "hadoop",
   "host_groups" :[
     {
@@ -39,8 +39,12 @@
       "hosts" : [
         {
           "fqdn" : "anil-hdp-sn-1.hashmap.net",
-	  "fqdn" : "anil-hdp-sn-2.hashmap.net",
-	  "fqdn" : "anil-hdp-sn-3.hashmap.net"
+        },
+        {
+          "fqdn" : "anil-hdp-sn-2.hashmap.net",
+        },
+        {
+          "fqdn" : "anil-hdp-sn-3.hashmap.net",
         }
       ]
     }
