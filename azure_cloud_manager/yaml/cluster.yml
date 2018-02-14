@@ -1,0 +1,20 @@
+"""
+YAML Configuration file for Microsft Azure Cloud Manager
+"""
+cluster:
+	name: walgreens_hdp_spark
+	blueprint: walgreens_hdp_spark.json
+	hostmapping: walgreens_hdp_spark-hostmap.json
+	ambari: hdp-an01.gombe.com
+	nodes: 
+		- hdp-en01.gombe.com
+		- hdp-mn01.gombe.com
+		- hdp-mn02.gombe.com
+		- hdp-mn03.gombe.com
+		- hdp-sn01.gombe.com
+		- hdp-sn02.gombe.com
+
+database:
+	host: hdp-db01.gombe.com
+	user: root
+	passwd: my secret password
