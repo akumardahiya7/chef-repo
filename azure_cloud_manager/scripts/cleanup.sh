@@ -19,7 +19,6 @@ rm -rf /etc/ambari-agent
 rm -rf /var/log/ambari-agent
 rm -rf /usr/lib/python2.6/site-packages/ambari*
 
-rm -rf /etc/chef
 
 #ambar-server
 #ambari-server stop

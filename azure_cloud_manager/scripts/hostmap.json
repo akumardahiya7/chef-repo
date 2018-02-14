@@ -1,0 +1,46 @@
+{
+  "blueprint" : "hdp-small-default",
+  "default_password" : "hadoop",
+  "host_groups" :[
+    {
+      "name" : "host_group_master_1",
+      "hosts" : [
+        {
+          "fqdn" : "hdp-mn01.clouddatadojo.com"
+        }
+      ]
+    },
+    {
+      "name" : "host_group_master_2",
+      "hosts" : [
+        {
+          "fqdn" : "hdp-mn02.clouddatadojo.com"
+        }
+      ]
+    },
+    {  
+      "name" : "host_group_master_3",
+      "hosts" : [
+        {
+          "fqdn" : "hdp-mn03.clouddatadojo.com"
+        }
+      ]
+    },
+    {  
+      "name" : "host_group_client_1",
+      "hosts" : [
+        {
+          "fqdn" : "hdp-sn01.clouddatadojo.com"
+        }
+      ]
+    },
+    {  
+      "name" : "host_group_slave_1",
+      "hosts" : [
+        {
+          "fqdn" : "hdp-sn02.clouddatadojo.com"
+        }
+      ]
+    }
+  ]
+}
