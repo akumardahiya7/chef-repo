@@ -11,13 +11,12 @@ python /usr/lib/python2.6/site-packages/ambari_agent/HostCleanup.py --silent
 service ambari-agent stop
 yum -y erase ambari-agent
 
-rm -rf /usr/lib/amrbari-agent
-rm -rf /var/lib/ambari-agent
-
 rm -rf /etc/ambari-agent
 rm -rf /usr/lib/python2.6/site-packages/ambari*
-rm -rf /var/log/ambari-agent
+rm -rf /usr/lib/amrbari-agent
+rm -rf /var/lib/ambari-agent
 rm -rf /var/run/ambari-agent
+rm -rf /var/log/ambari-agent
 
 rm -rf /etc/chef
 
@@ -26,37 +25,24 @@ rm -rf /etc/chef
 ambari-server reset
 yum -y erase ambari-server
 
+rm -rf /etc/ambari-server
+rm -rf /usr/lib/python2.6/site-packages/ambari*
+rm -rf /usr/lib/ambari-server-backups
+rm -rf /usr/lib/ambari-server
 rm -rf /var/lib/ambari-server
 rm -rf /var/run/ambari-server
-rm -rf /usr/lib/ambari-server
-
-rm -rf /etc/ambari-server
 rm -rf /var/log/ambari-server
-rm -rf /usr/lib/python2.6/site-packages/ambari*
 
 #postgresql
 service postgresql stop
 yum -y erase postgresql -y
 rm -rf /var/lib/pgsql
 
-#rm -rf /var/log/ambari-agent
-#rm -rf /etc/ambari-agent
-#rm -rf /var/run/ambari-agent
-
-rm -rf /etc/ambari-server
-rm -rf /usr/lib/ambari-server-backups
-rm -rf /var/run/ambari-server
-rm -rf /var/log/ambari-server/
-
 #Remove Hadoop packages on all nodes
 
-#ams
-yum -y remove ams\*
-rm -rf /etc/ams-hbase
-rm -rf /usr/lib/ams-hbase
 
 #falcon
-yum -y remove falcon\*
+yum -y remove "falcon*"
 rm -rf /etc/falcon
 rm -rf /var/run/falcon
 rm -rf /var/log/falcon
@@ -64,10 +50,10 @@ rm -f /usr/bin/falcon
 userdel -r falcon
 
 #ganglia
-yum -y remove ganglia\*
+yum -y remove "ganglia*"
 
 #hbase
-yum -y remove hbase\*
+yum -y remove "hbase*"
 rm -rf /etc/hbase
 rm -rf /var/run/hbase
 rm -rf /var/log/hbase
@@ -75,41 +61,42 @@ rm -f /usr/bin/hbase
 userdel -r hbase
 
 #hdfs
-yum -y remove hdfs\*
+yum -y remove "hdfs*"
 rm -rf /etc/hadoop
 rm -rf /etc/hadoop-httpfs
 
 rm -rf /var/lib/hadoop-hdfs
-
 rm -rf /var/run/hadoop 
 rm -rf /var/log/hadoop
 rm -f /usr/bin/hdfs
 userdel -r hdfs
 
-#hive
-yum -y remove hive\*
+#hive & hive2
+yum -y remove "hive*"
 rm -rf /etc/hive
+rm -rf /etc/hive2
 rm -rf /etc/hive-hcatalog
 rm -rf /etc/hive-webhcat
-rm -f /usr/bin/hcat
-userdel -r hcat
 
-#hive2
-rm -rf /etc/hive2
+
+rm -rf /var/lib/hive
 rm -rf /var/lib/hive2
 
 rm -rf /var/run/hive
+rm -rf /var/run/hive2
 rm -rf /var/run/hive-hcatalog
 rm -rf /var/run/webhcat
-rm -rf /var/run/hive2
 
 rm -rf /var/log/hive
+rm -rf /var/log/hive2
 rm -rf /var/log/hive-hcatalog
 rm -rf /var/log/webhcat
-rm -rf /var/log/hive2
 
 rm -f /usr/bin/hive
 rm -f /usr/bin/hiveserver2
+rm -f /usr/bin/hcat
+
+userdel -r hcat
 userdel -r hive
 
 #kafka
@@ -125,13 +112,18 @@ rm -rf /var/run/knox
 rm -rf /var/log/knox
 userdel -r knox
 
-#mapred
-yum -y remove mapreduce2\*
+##mapred
+yum -y remove "mapreduce2*"
 rm -rf /var/lib/hadoop-mapreduce
 rm -rf /var/run/hadoop-mapreduce
 rm -rf /var/log/hadoop-mapreduce
 rm -f /usr/bin/mapred
 userdel -r mapred
+
+#hst
+rm -rf /var/log/hst
+rm -rf /etc/hst
+rm -rf /var/run/hst
 
 
 #nagios
@@ -166,9 +158,10 @@ rm -f /usr/bin/ranger-usersync-stop
 userdel -r ranger
 
 #spark2
-yum -y remove spark2\*
+yum -y remove "spark2*"
 rm -rf /etc/spark2
 rm -rf /var/log/spark2
+rm -rf /var/run/spark2
 userdel -r spark
 
 #storm
@@ -182,6 +175,7 @@ userdel -r storm
 yum -y remove tez\*
 rm -rf /etc/tez
 rm -rf /etc/tez_hive2
+rm -rf /var/run/tez
 rm -rf /var/log/tez
 userdel -r tez
 
@@ -218,7 +212,13 @@ yum -y remove slider\*
 rm -rf /var/log/slider
 rm -f /usr/bin/slider
 
-# ambari 
+## ambari 
+
+#ams
+yum -y remove ams\*
+rm -rf /etc/ams-hbase
+rm -rf /usr/lib/ams-hbase
+
 yum -y remove ambari-metrics\*
 rm -rf /etc/ambari-metrics-grafana
 
@@ -244,13 +244,13 @@ userdel -r ambari-qa
 
 #livy
 yum -y remove livy\*
-rm -rf /var/log/livy
 rm -rf /etc/livy
+rm -rf /var/log/livy
 
 #livy2
 yum -y remove livy2\*
-rm -rf /var/log/livy2
 rm -rf /etc/livy2
+rm -rf /var/log/livy2
 
 #zeppelin
 yum -y remove zeppelin\*
@@ -262,10 +262,6 @@ rm -f /usr/bin/phoenix-sqlline
 rm -f /usr/bin/phoenix-sqlline-thin
 userdel -r zeppelin
 
-#hst
-rm -rf /var/log/hst
-rm -rf /etc/hst
-rm -rf /var/run/hst
 
 
 #flume
