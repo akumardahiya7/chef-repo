@@ -11,13 +11,13 @@ python /usr/lib/python2.6/site-packages/ambari_agent/HostCleanup.py --silent
 service ambari-agent stop
 yum -y erase ambari-agent
 
-rm -rf /var/lib/ambari-agent
-rm -rf /var/run/ambari-agent
 rm -rf /usr/lib/amrbari-agent
+rm -rf /var/lib/ambari-agent
 
 rm -rf /etc/ambari-agent
-rm -rf /var/log/ambari-agent
 rm -rf /usr/lib/python2.6/site-packages/ambari*
+rm -rf /var/log/ambari-agent
+rm -rf /var/run/ambari-agent
 
 rm -rf /etc/chef
 
@@ -34,35 +34,265 @@ rm -rf /etc/ambari-server
 rm -rf /var/log/ambari-server
 rm -rf /usr/lib/python2.6/site-packages/ambari*
 
-
+#postgresql
 service postgresql stop
 yum -y erase postgresql -y
 rm -rf /var/lib/pgsql
 
+#rm -rf /var/log/ambari-agent
+#rm -rf /etc/ambari-agent
+#rm -rf /var/run/ambari-agent
+
+rm -rf /etc/ambari-server
+rm -rf /usr/lib/ambari-server-backups
+rm -rf /var/run/ambari-server
+rm -rf /var/log/ambari-server/
+
 #Remove Hadoop packages on all nodes
+
+#ams
 yum -y remove ams\*
+rm -rf /etc/ams-hbase
+rm -rf /usr/lib/ams-hbase
+
+#falcon
 yum -y remove falcon\*
+rm -rf /etc/falcon
+rm -rf /var/run/falcon
+rm -rf /var/log/falcon
+rm -f /usr/bin/falcon
+userdel -r falcon
+
+#ganglia
 yum -y remove ganglia\*
+
+#hbase
 yum -y remove hbase\*
+rm -rf /etc/hbase
+rm -rf /var/run/hbase
+rm -rf /var/log/hbase
+rm -f /usr/bin/hbase
+userdel -r hbase
+
+#hdfs
 yum -y remove hdfs\*
+rm -rf /etc/hadoop
+rm -rf /etc/hadoop-httpfs
+
+rm -rf /var/lib/hadoop-hdfs
+
+rm -rf /var/run/hadoop 
+rm -rf /var/log/hadoop
+rm -f /usr/bin/hdfs
+userdel -r hdfs
+
+#hive
 yum -y remove hive\*
+rm -rf /etc/hive
+rm -rf /etc/hive-hcatalog
+rm -rf /etc/hive-webhcat
+rm -f /usr/bin/hcat
+userdel -r hcat
+
+#hive2
+rm -rf /etc/hive2
+rm -rf /var/lib/hive2
+
+rm -rf /var/run/hive
+rm -rf /var/run/hive-hcatalog
+rm -rf /var/run/webhcat
+rm -rf /var/run/hive2
+
+rm -rf /var/log/hive
+rm -rf /var/log/hive-hcatalog
+rm -rf /var/log/webhcat
+rm -rf /var/log/hive2
+
+rm -f /usr/bin/hive
+rm -f /usr/bin/hiveserver2
+userdel -r hive
+
+#kafka
 yum -y remove kafka\*
+rm -f /usr/bin/kafka
+userdel -r kafka
+
+#knox
 yum -y remove knox\*
+rm -rf /etc/knox
+rm -rf /var/lib/knox
+rm -rf /var/run/knox
+rm -rf /var/log/knox
+userdel -r knox
+
+#mapred
 yum -y remove mapreduce2\*
+rm -rf /var/lib/hadoop-mapreduce
+rm -rf /var/run/hadoop-mapreduce
+rm -rf /var/log/hadoop-mapreduce
+rm -f /usr/bin/mapred
+userdel -r mapred
+
+
+#nagios
 yum -y remove nagios\*
+
+#oozie
 yum -y remove oozie\*
+rm -rf /etc/oozie
+rm -rf /var/run/oozie 
+rm -rf /var/log/oozie
+rm -f /usr/bin/oozie
+rm -f /usr/bin/oozied.sh
+userdel -r oozie
+
+#pig
 yum -y remove pig\*
+rm -rf /etc/pig
+rm -rf /var/log/pig
+rm -f /usr/bin/pig
+
+#ranger
 yum -y remove ranger\*
+rm -rf /etc/ranger-admin
+rm -rf /etc/ranger-usersync
+rm -f /usr/bin/ranger-admin
+rm -f /usr/bin/ranger-admin-start
+rm -f /usr/bin/ranger-admin-stop
+rm -f /usr/bin/ranger-kms
+rm -f /usr/bin/ranger-usersync
+rm -f /usr/bin/ranger-usersync-start
+rm -f /usr/bin/ranger-usersync-stop
+userdel -r ranger
+
+#spark2
 yum -y remove spark2\*
+rm -rf /etc/spark2
+rm -rf /var/log/spark2
+userdel -r spark
+
+#storm
 yum -y remove storm\*
+rm -rf /var/lib/storm
+rm -f /usr/bin/storm
+rm -f /usr/bin/storm-slider
+userdel -r storm
+
+#tez
 yum -y remove tez\*
+rm -rf /etc/tez
+rm -rf /etc/tez_hive2
+rm -rf /var/log/tez
+userdel -r tez
+
+#yarn
 yum -y remove yarn\*
+rm -rf /var/lib/hadoop-yarn 
+rm -rf /var/run/hadoop-yarn
+rm -rf /var/log/hadoop-yarn
+rm -f /usr/bin/yarn
+userdel -r yarn
+
+#zookeeper
 yum -y remove zookeeper\*
-yum -y remove accumulo\*
+rm -rf /etc/zookeeper
+rm -rf /var/run/zookeeper
+rm -rf /var/log/zookeeper
+rm -f /usr/bin/zookeeper-client
+rm -f /usr/bin/zookeeper-server
+rm -f /usr/bin/zookeeper-server-cleanup
+userdel -r zookeeper
+
+#smartsense
 yum -y remove smartsense\*
+rm -rf /var/lib/smartsense
+rm -rf "/var/log/smartsense*"
+
+# accumulo
+yum -y remove accumulo\*
+rm -f /usr/bin/accumulo
+userdel -r accumulo
+
+#slider
 yum -y remove slider\*
+rm -rf /var/log/slider
+rm -f /usr/bin/slider
+
+# ambari 
 yum -y remove ambari-metrics\*
+rm -rf /etc/ambari-metrics-grafana
+
+rm -rf /usr/lib/ambari-metrics-hadoop-sink
+rm -rf /usr/lib/ambari-metrics-kafka-sink
+rm -rf /var/lib/ambari-metrics-grafana
+
+rm -rf /var/run/ambari-metrics-grafana
+rm -rf /var/log/ambari-metrics-monitor
+rm -rf /var/log/ambari-metrics-grafana
+userdel -r ams
+
+
+#ambari-infra-solr
 yum -y remove ambari-infra-solr\*
+rm -rf /usr/lib/ambari-infra-solr-client
+rm -rf "/var/log/ambari-infra-solr*"
+rm -rf /var/log/solr
+
+
+userdel -r ambari-qa
+
+
+#livy
+yum -y remove livy\*
+rm -rf /var/log/livy
+rm -rf /etc/livy
+
+#livy2
+yum -y remove livy2\*
+rm -rf /var/log/livy2
+rm -rf /etc/livy2
+
+#zeppelin
+yum -y remove zeppelin\*
+rm -rf /var/log/zeppelin
+rm -rf /etc/phoenix
+rm -f /usr/bin/phoenix-psql
+rm -f /usr/bin/phoenix-queryserver
+rm -f /usr/bin/phoenix-sqlline
+rm -f /usr/bin/phoenix-sqlline-thin
+userdel -r zeppelin
+
+#hst
+rm -rf /var/log/hst
+rm -rf /etc/hst
+rm -rf /var/run/hst
+
+
+#flume
+rm -rf /etc/flume
+rm -rf /var/lib/flume
+rm -rf /var/run/flume
+rm -rf /var/log/flume
+rm -f /usr/bin/flume-ng
+userdel -r flume
+
+#sqoop
+rm -f /usr/bin/sqoop
+rm -f /usr/bin/sqoop-codegen
+rm -f /usr/bin/sqoop-create-hive-table
+rm -f /usr/bin/sqoop-eval
+rm -f /usr/bin/sqoop-export
+rm -f /usr/bin/sqoop-help
+rm -f /usr/bin/sqoop-import
+rm -f /usr/bin/sqoop-import-all-tables
+rm -f /usr/bin/sqoop-job
+rm -f /usr/bin/sqoop-list-databases
+rm -f /usr/bin/sqoop-list-tables
+rm -f /usr/bin/sqoop-merge
+rm -f /usr/bin/sqoop-metastore
+rm -f /usr/bin/sqoop-version
+userdel -r sqoop
+
 
 #Remove repositories on all nodes
 rm -rf /etc/yum.repos.d/ambari.repo /etc/yum.repos.d/HDP*
@@ -70,23 +300,8 @@ yum clean all
 
 
 #Remove log folders on all nodes
-rm -rf /var/log/ambari-agent
-rm -rf /var/log/ambari-metrics-grafana
-rm -rf /var/log/ambari-metrics-monitor
-rm -rf /var/log/ambari-server/
-rm -rf /var/log/falcon
-rm -rf /var/log/flume
-rm -rf /var/log/hadoop
-rm -rf /var/log/hadoop-mapreduce
-rm -rf /var/log/hadoop-yarn
-rm -rf /var/log/hive
-rm -rf /var/log/hive-hcatalog
-rm -rf /var/log/hive2
-rm -rf /var/log/hst
-rm -rf /var/log/knox
-rm -rf /var/log/oozie
-rm -rf /var/log/solr
-rm -rf /var/log/zookeeper
+
+#
 
 #Remove Hadoop folders including HDFS data on all nodes
 
@@ -101,71 +316,11 @@ rm -rf /usr/hdp
 rm -rf /var/hadoop
 
 #Remove config folders on all nodes
-rm -rf /etc/ambari-agent
-rm -rf /etc/ambari-metrics-grafana
-rm -rf /etc/ambari-server
-rm -rf /etc/ams-hbase
-rm -rf /etc/falcon
-rm -rf /etc/flume
-rm -rf /etc/hadoop
-rm -rf /etc/hadoop-httpfs
-rm -rf /etc/hbase
-rm -rf /etc/hive
-rm -rf /etc/hive-hcatalog
-rm -rf /etc/hive-webhcat
-rm -rf /etc/hive2
-rm -rf /etc/hst
-rm -rf /etc/knox
-rm -rf /etc/livy
 rm -rf /etc/mahout
-rm -rf /etc/oozie
-rm -rf /etc/phoenix
-rm -rf /etc/pig
-rm -rf /etc/ranger-admin
-rm -rf /etc/ranger-usersync
-rm -rf /etc/spark2
-rm -rf /etc/tez
-rm -rf /etc/tez_hive2
-rm -rf /etc/zookeeper
 
 #Remove PIDs on all nodes
-rm -rf /var/run/ambari-agent
-rm -rf /var/run/ambari-metrics-grafana
-rm -rf /var/run/ambari-server
-rm -rf /var/run/falcon
-rm -rf /var/run/flume
-rm -rf /var/run/hadoop 
-rm -rf /var/run/hadoop-mapreduce
-rm -rf /var/run/hadoop-yarn
-rm -rf /var/run/hbase
-rm -rf /var/run/hive
-rm -rf /var/run/hive-hcatalog
-rm -rf /var/run/hive2
-rm -rf /var/run/hst
-rm -rf /var/run/knox
-rm -rf /var/run/oozie 
-rm -rf /var/run/webhcat
-rm -rf /var/run/zookeeper
 
 #Remove library folders on all nodes
-rm -rf /usr/lib/ambari-agent
-rm -rf /usr/lib/ambari-infra-solr-client
-rm -rf /usr/lib/ambari-metrics-hadoop-sink
-rm -rf /usr/lib/ambari-metrics-kafka-sink
-rm -rf /usr/lib/ambari-server-backups
-rm -rf /usr/lib/ams-hbase
-rm -rf /usr/lib/mysql
-rm -rf /var/lib/ambari-agent
-rm -rf /var/lib/ambari-metrics-grafana
-rm -rf /var/lib/ambari-server
-rm -rf /var/lib/flume
-rm -rf /var/lib/hadoop-hdfs
-rm -rf /var/lib/hadoop-mapreduce
-rm -rf /var/lib/hadoop-yarn 
-rm -rf /var/lib/hive2
-rm -rf /var/lib/knox
-rm -rf /var/lib/smartsense
-rm -rf /var/lib/storm
 
 # Clean folder /var/tmp/* on all nodes
 rm -rf /var/tmp/*
@@ -178,81 +333,17 @@ rm -rf /var/lib/mysql
 
 #Remove symlinks on all nodes. Especially check folders /usr/sbin and /usr/lib/python2.6/site-packages
 
-cd /usr/bin
-rm -rf accumulo
-rm -rf atlas-start
-rm -rf atlas-stop
-rm -rf beeline
-rm -rf falcon
-rm -rf flume-ng
-rm -rf hbase
-rm -rf hcat
-rm -rf hdfs
-rm -rf hive
-rm -rf hiveserver2
-rm -rf kafka
-rm -rf mahout
-rm -rf mapred
-rm -rf oozie
-rm -rf oozied.sh
-rm -rf phoenix-psql
-rm -rf phoenix-queryserver
-rm -rf phoenix-sqlline
-rm -rf phoenix-sqlline-thin
-rm -rf pig
-rm -rf python-wrap
-rm -rf ranger-admin
-rm -rf ranger-admin-start
-rm -rf ranger-admin-stop
-rm -rf ranger-kms
-rm -rf ranger-usersync
-rm -rf ranger-usersync-start
-rm -rf ranger-usersync-stop
-rm -rf slider
-rm -rf sqoop
-rm -rf sqoop-codegen
-rm -rf sqoop-create-hive-table
-rm -rf sqoop-eval
-rm -rf sqoop-export
-rm -rf sqoop-help
-rm -rf sqoop-import
-rm -rf sqoop-import-all-tables
-rm -rf sqoop-job
-rm -rf sqoop-list-databases
-rm -rf sqoop-list-tables
-rm -rf sqoop-merge
-rm -rf sqoop-metastore
-rm -rf sqoop-version
-rm -rf storm
-rm -rf storm-slider
-rm -rf worker-lanucher
-rm -rf yarn
-rm -rf zookeeper-client
-rm -rf zookeeper-server
-rm -rf zookeeper-server-cleanup
+rm -f /usr/bin/atlas-start
+rm -f /usr/bin/atlas-stop
 
-# Remove service users on all nodes
-userdel -r accumulo
-userdel -r ambari-qa
-userdel -r ams
-userdel -r falcon
-userdel -r flume
-userdel -r hbase
-userdel -r hcat
-userdel -r hdfs
-userdel -r hive
-userdel -r kafka
-userdel -r knox
-userdel -r mapred
-userdel -r oozie
-userdel -r ranger
-userdel -r spark
-userdel -r sqoop
-userdel -r storm
-userdel -r tez
-userdel -r yarn
-userdel -r zeppelin
-userdel -r zookeeper
+rm -f /usr/bin/beeline
+
+rm -f /usr/bin/mahout
+
+rm -f /usr/bin/python-wrap
+
+rm -f /usr/bin/worker-lanucher
+
 
 # find / -name ** on all nodes. You will definitely find several more files/folders. Remove them.
 find / -name *ambari*
