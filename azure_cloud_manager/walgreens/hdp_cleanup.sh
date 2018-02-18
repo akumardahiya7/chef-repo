@@ -167,6 +167,7 @@ userdel -r spark
 #storm
 yum -y remove storm\*
 rm -rf /etc/storm-slider-client
+rm -rf /usr/lib/storm
 rm -rf /var/lib/storm
 rm -f /usr/bin/storm
 rm -f /usr/bin/storm-slider
@@ -234,6 +235,7 @@ userdel -r ams
 
 #ambari-infra-solr
 yum -y remove ambari-infra-solr\*
+rm -rf /etc/ambari-infra-solr*
 rm -rf /usr/lib/ambari-infra-solr*
 rm -rf /var/log/ambari-infra-solr*
 rm -rf /var/run/ambari-infra-solr*
@@ -269,6 +271,7 @@ userdel -r zeppelin
 
 #flume
 rm -rf /etc/flume
+rm -rf /usr/lib/flume
 rm -rf /var/lib/flume
 rm -rf /var/run/flume
 rm -rf /var/log/flume
@@ -290,6 +293,12 @@ rm -f /usr/bin/sqoop-list-tables
 rm -f /usr/bin/sqoop-merge
 rm -f /usr/bin/sqoop-metastore
 rm -f /usr/bin/sqoop-version
+
+rm -rf /etc/sqoop
+rm -rf /var/run/sqoop
+rm -rf /var/log/sqoop
+
+
 userdel -r sqoop
 
 
