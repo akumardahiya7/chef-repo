@@ -85,7 +85,8 @@ end
 
 service 'ambari-agent' do
   supports :status => true, :restart => true, :reload => false
-  action [:enable, :start]
+  #action [:enable, :start]
+  action [:enable, :restart]
 end
 
 #execute 'start_agent' do 

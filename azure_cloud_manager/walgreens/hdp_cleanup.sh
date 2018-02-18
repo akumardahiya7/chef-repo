@@ -13,7 +13,7 @@ yum -y erase ambari-agent
 
 rm -rf /etc/ambari-agent
 rm -rf /usr/lib/python2.6/site-packages/ambari*
-rm -rf /usr/lib/amrbari-agent
+rm -rf /usr/lib/ambari-agent
 rm -rf /var/lib/ambari-agent
 rm -rf /var/run/ambari-agent
 rm -rf /var/log/ambari-agent
@@ -42,7 +42,7 @@ rm -rf /var/lib/pgsql
 
 
 #falcon
-yum -y remove "falcon*"
+yum -y remove falcon\*
 rm -rf /etc/falcon
 rm -rf /var/run/falcon
 rm -rf /var/log/falcon
@@ -53,7 +53,7 @@ userdel -r falcon
 yum -y remove "ganglia*"
 
 #hbase
-yum -y remove "hbase*"
+yum -y remove hbase\*
 rm -rf /etc/hbase
 rm -rf /var/run/hbase
 rm -rf /var/log/hbase
@@ -61,7 +61,7 @@ rm -f /usr/bin/hbase
 userdel -r hbase
 
 #hdfs
-yum -y remove "hdfs*"
+yum -y remove hdfs\*
 rm -rf /etc/hadoop
 rm -rf /etc/hadoop-httpfs
 
@@ -72,7 +72,7 @@ rm -f /usr/bin/hdfs
 userdel -r hdfs
 
 #hive & hive2
-yum -y remove "hive*"
+yum -y remove hive\*
 rm -rf /etc/hive
 rm -rf /etc/hive2
 rm -rf /etc/hive-hcatalog
@@ -113,7 +113,7 @@ rm -rf /var/log/knox
 userdel -r knox
 
 ##mapred
-yum -y remove "mapreduce2*"
+yum -y remove mapreduce2\*
 rm -rf /var/lib/hadoop-mapreduce
 rm -rf /var/run/hadoop-mapreduce
 rm -rf /var/log/hadoop-mapreduce
@@ -158,14 +158,15 @@ rm -f /usr/bin/ranger-usersync-stop
 userdel -r ranger
 
 #spark2
-yum -y remove "spark2*"
-rm -rf /etc/spark2
-rm -rf /var/log/spark2
-rm -rf /var/run/spark2
+yum -y remove spark\*
+rm -rf /etc/spark*
+rm -rf /var/log/spark*
+rm -rf /var/run/spark*
 userdel -r spark
 
 #storm
 yum -y remove storm\*
+rm -rf /etc/storm-slider-client
 rm -rf /var/lib/storm
 rm -f /usr/bin/storm
 rm -f /usr/bin/storm-slider
@@ -199,8 +200,9 @@ userdel -r zookeeper
 
 #smartsense
 yum -y remove smartsense\*
-rm -rf /var/lib/smartsense
-rm -rf "/var/log/smartsense*"
+rm -rf /var/lib/smartsense*
+rm -rf /var/log/smartsense*
+rm -rf /var/run/smartsense*
 
 # accumulo
 yum -y remove accumulo\*
@@ -209,6 +211,7 @@ userdel -r accumulo
 
 #slider
 yum -y remove slider\*
+rm -rf /etc/slider
 rm -rf /var/log/slider
 rm -f /usr/bin/slider
 
@@ -220,22 +223,20 @@ rm -rf /etc/ams-hbase
 rm -rf /usr/lib/ams-hbase
 
 yum -y remove ambari-metrics\*
-rm -rf /etc/ambari-metrics-grafana
 
-rm -rf /usr/lib/ambari-metrics-hadoop-sink
-rm -rf /usr/lib/ambari-metrics-kafka-sink
-rm -rf /var/lib/ambari-metrics-grafana
-
-rm -rf /var/run/ambari-metrics-grafana
-rm -rf /var/log/ambari-metrics-monitor
-rm -rf /var/log/ambari-metrics-grafana
+rm -rf /etc/ambari-metrics*
+rm -rf /usr/lib/ambari-metrics*
+rm -rf /var/lib/ambari-metrics*
+rm -rf /var/run/ambari-metrics*
+rm -rf /var/log/ambari-metrics*
 userdel -r ams
 
 
 #ambari-infra-solr
 yum -y remove ambari-infra-solr\*
-rm -rf /usr/lib/ambari-infra-solr-client
-rm -rf "/var/log/ambari-infra-solr*"
+rm -rf /usr/lib/ambari-infra-solr*
+rm -rf /var/log/ambari-infra-solr*
+rm -rf /var/run/ambari-infra-solr*
 rm -rf /var/log/solr
 
 
@@ -254,7 +255,9 @@ rm -rf /var/log/livy2
 
 #zeppelin
 yum -y remove zeppelin\*
+rm -rf /etc/zeppelin
 rm -rf /var/log/zeppelin
+
 rm -rf /etc/phoenix
 rm -f /usr/bin/phoenix-psql
 rm -f /usr/bin/phoenix-queryserver
@@ -341,6 +344,9 @@ rm -f /usr/bin/python-wrap
 rm -f /usr/bin/worker-lanucher
 
 
+#removed /tmp folder
+rm -rf /tmp/*
+
 # find / -name ** on all nodes. You will definitely find several more files/folders. Remove them.
 find / -name *ambari*
 find / -name *accumulo*
@@ -367,4 +373,22 @@ find / -name *sqoop*
 find / -name *storm*
 find / -name *yarn*
 find / -name *zookeeper*
+
+
+
+#rm -rf /etc/ambari-agent
+#rm -rf /usr/lib/python2.6/site-packages/ambari*
+#rm -rf /usr/lib/ambari-agent
+#rm -rf /var/lib/ambari-agent
+#rm -rf /var/run/ambari-agent
+#rm -rf /var/log/ambari-agent
+
+#rm -rf /etc/ambari-server
+#rm -rf /usr/lib/python2.6/site-packages/ambari*
+#rm -rf /usr/lib/ambari-server-backups
+#rm -rf /usr/lib/ambari-server
+#rm -rf /var/lib/ambari-server
+#rm -rf /var/run/ambari-server
+#rm -rf /var/log/ambari-server
+
 

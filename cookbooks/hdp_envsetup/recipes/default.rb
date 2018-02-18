@@ -16,6 +16,13 @@ execute 'set_umask' do
  command 'umask 0022'
 end
 
+cookbook_file "/etc/python/cert-verification.cfg" do
+  source 'cert-verification.cfg'
+  owner 'root'
+  group 'root'
+  mode '0644'
+end
+
 search(:users, '*:*').each do |u|
   directory "/home/#{u['id']}/.ssh" do
     owner u['id']

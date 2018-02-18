@@ -1,0 +1,428 @@
+{
+"configurations" : [
+ { 
+	"core-site": 
+	{
+		"properties" : 
+		{
+			"fs.defaultFS" : "hdfs://hdpspark",
+			"ha.zookeeper.quorum" : "%HOSTGROUP::host_group_3%:2181,%HOSTGROUP::host_group_4%:2181,%HOSTGROUP::host_group_5%:2181",
+			"fs.trash.interval": "4320"
+		}
+	}
+ },
+ { 
+	"hdfs-site": 
+	{
+		"properties" : 
+		{
+			"dfs.client.failover.proxy.provider.hdpspark" : "org.apache.hadoop.hdfs.server.namenode.ha.ConfiguredFailoverProxyProvider",
+			"dfs.ha.automatic-failover.enabled" : "true",
+			"dfs.ha.fencing.methods" : "shell(/bin/true)",
+			"dfs.ha.namenodes.hdpspark" : "nn1,nn2",
+			"dfs.namenode.http-address" : "%HOSTGROUP::host_group_3%:50070",
+			"dfs.namenode.http-address.hdpspark.nn1" : "%HOSTGROUP::host_group_3%:50070",
+			"dfs.namenode.http-address.hdpspark.nn2" : "%HOSTGROUP::host_group_5%:50070",
+			"dfs.namenode.https-address" : "%HOSTGROUP::host_group_3%:50470",
+			"dfs.namenode.https-address.hdpspark.nn1" : "%HOSTGROUP::host_group_3%:50470",
+			"dfs.namenode.https-address.hdpspark.nn2" : "%HOSTGROUP::host_group_5%:50470",
+			"dfs.namenode.rpc-address.hdpspark.nn1" : "%HOSTGROUP::host_group_3%:8020",
+			"dfs.namenode.rpc-address.hdpspark.nn2" : "%HOSTGROUP::host_group_5%:8020",
+			"dfs.namenode.shared.edits.dir" : "qjournal://%HOSTGROUP::host_group_3%:8485;%HOSTGROUP::host_group_4%:8485;%HOSTGROUP::host_group_5%:8485/hdpspark",
+			"dfs.nameservices" : "hdpspark",
+			"dfs.namenode.safemode.threshold-pct": "0.99"
+		}
+	}
+ },
+ {
+	"yarn-site" : 
+	{
+		"properties" : 
+		{
+			"hadoop.registry.rm.enabled" : "false",
+			"hadoop.registry.zk.quorum" : "%HOSTGROUP::host_group_3%:2181,%HOSTGROUP::host_group_4%:2181,%HOSTGROUP::host_group_5%:2181",
+			"yarn.log.server.url" : "http://%HOSTGROUP::host_group_5%:19888/jobhistory/logs",
+			"yarn.resourcemanager.address" : "%HOSTGROUP::host_group_3%:8050",
+			"yarn.resourcemanager.admin.address" : "%HOSTGROUP::host_group_3%:8141",
+			"yarn.resourcemanager.cluster-id" : "yarn-cluster",
+			"yarn.resourcemanager.ha.automatic-failover.zk-base-path" : "/yarn-leader-election",
+			"yarn.resourcemanager.ha.enabled" : "true",
+			"yarn.resourcemanager.ha.rm-ids" : "rm1,rm2",
+			"yarn.resourcemanager.hostname" : "%HOSTGROUP::host_group_3%",
+			"yarn.resourcemanager.hostname.rm1" : "%HOSTGROUP::host_group_3%",
+			"yarn.resourcemanager.hostname.rm2" : "%HOSTGROUP::host_group_5%",
+			"yarn.resourcemanager.webapp.address.rm1" : "%HOSTGROUP::host_group_3%:8088",
+			"yarn.resourcemanager.webapp.address.rm2" : "%HOSTGROUP::host_group_5%:8088",
+			"yarn.resourcemanager.recovery.enabled" : "true",
+			"yarn.resourcemanager.resource-tracker.address" : "%HOSTGROUP::host_group_3%:8025",
+			"yarn.resourcemanager.scheduler.address" : "%HOSTGROUP::host_group_3%:8030",
+			"yarn.resourcemanager.store.class" : "org.apache.hadoop.yarn.server.resourcemanager.recovery.ZKRMStateStore",
+			"yarn.resourcemanager.webapp.address" : "%HOSTGROUP::host_group_3%:8088",
+			"yarn.resourcemanager.webapp.https.address" : "%HOSTGROUP::host_group_3%:8090",
+			"yarn.resourcemanager.zk-address": "%HOSTGROUP::host_group_3%:2181,%HOSTGROUP::host_group_4%:2181,%HOSTGROUP::host_group_5%:2181",
+			"yarn.timeline-service.address" : "%HOSTGROUP::host_group_5%:10200",
+			"yarn.timeline-service.webapp.address" : "%HOSTGROUP::host_group_5%:8188",
+			"yarn.timeline-service.webapp.https.address" : "%HOSTGROUP::host_group_5%:8190",
+			"yarn.acl.enable": "true"
+		}
+	}
+ },
+ {
+ "hbase-site" : 
+		{
+			"properties_attributes" : { },
+			"properties" : {
+			"hbase.rootdir" : "hdfs://hdpspark/apps/hbase/data",
+			"hbase.zookeeper.quorum" : "%HOSTGROUP::host_group_3%,%HOSTGROUP::host_group_4%,%HOSTGROUP::host_group_5%"
+			}
+		}
+ }
+],
+
+"host_groups" : [
+    {
+      "components" : [
+        {
+          "name" : "YARN_CLIENT"
+        },
+        {
+          "name" : "HDFS_CLIENT"
+        },
+        {
+          "name" : "SPARK2_CLIENT"
+        },
+		{
+          "name" : "INFRA_SOLR_CLIENT"
+        },
+        {
+          "name" : "METRICS_MONITOR"
+        },
+        {
+          "name" : "TEZ_CLIENT"
+        },
+        {
+          "name" : "ZOOKEEPER_CLIENT"
+        },
+        {
+          "name" : "HCAT"
+        },
+        {
+          "name" : "PIG"
+        },
+        {
+          "name" : "HST_AGENT"
+        },
+        {
+          "name" : "MAPREDUCE2_CLIENT"
+        },
+        {
+          "name" : "SLIDER"
+        },
+        {
+          "name" : "HBASE_CLIENT"
+        },
+        {
+          "name" : "HIVE_CLIENT"
+        },
+        {
+          "name" : "METRICS_COLLECTOR"
+        },
+        {
+          "name" : "METRICS_GRAFANA"
+        }
+      ],
+      "configurations" : [ ],
+      "name" : "host_group_1",
+      "cardinality" : "1"
+    },
+	{
+      "components" : [
+        {
+          "name" : "YARN_CLIENT"
+        },
+        {
+          "name" : "HDFS_CLIENT"
+        },
+        {
+          "name" : "SPARK2_CLIENT"
+        },
+        {
+          "name" : "METRICS_MONITOR"
+        },
+        {
+          "name" : "INFRA_SOLR_CLIENT"
+        },
+        {
+          "name" : "TEZ_CLIENT"
+        },
+        {
+          "name" : "ZOOKEEPER_CLIENT"
+        },
+        {
+          "name" : "HCAT"
+        },
+        {
+          "name" : "PIG"
+        },
+        {
+          "name" : "HST_AGENT"
+        },
+        {
+          "name" : "MAPREDUCE2_CLIENT"
+        },
+        {
+          "name" : "SLIDER"
+        },
+        {
+          "name" : "HBASE_CLIENT"
+        },
+        {
+          "name" : "INFRA_SOLR"
+        },
+        {
+          "name" : "HIVE_CLIENT"
+        },
+        {
+          "name" : "METRICS_COLLECTOR"
+        },
+        {
+          "name" : "PHOENIX_QUERY_SERVER"
+        }
+      ],
+      "configurations" : [ ],
+      "name" : "host_group_2",
+      "cardinality" : "1"
+    },
+    {
+      "components" : [
+        {
+          "name" : "YARN_CLIENT"
+        },
+        {
+          "name" : "HDFS_CLIENT"
+        },
+        {
+          "name" : "HST_SERVER"
+        },
+        {
+          "name" : "SPARK2_THRIFTSERVER"
+        },
+        {
+          "name" : "METRICS_MONITOR"
+        },
+        {
+          "name" : "HBASE_MASTER"
+        },
+        {
+          "name" : "TEZ_CLIENT"
+        },
+        {
+          "name" : "ZEPPELIN_MASTER"
+        },
+        {
+          "name" : "SPARK2_JOBHISTORYSERVER"
+        },
+        
+        {
+          "name" : "HST_AGENT"
+        },
+        {
+          "name" : "MAPREDUCE2_CLIENT"
+        },
+        {
+          "name" : "ZOOKEEPER_SERVER"
+        },
+        {
+          "name" : "JOURNALNODE"
+        },
+        {
+          "name" : "PHOENIX_QUERY_SERVER"
+        }
+      ],
+      "configurations" : [ ],
+      "name" : "host_group_4",
+      "cardinality" : "1"
+    },
+    {
+      "components" : [
+        {
+          "name" : "YARN_CLIENT"
+        },
+        {
+          "name" : "HDFS_CLIENT"
+        },
+        {
+          "name" : "ZKFC"
+        },
+        {
+          "name" : "METRICS_MONITOR"
+        },
+        
+        {
+          "name" : "NAMENODE"
+        },
+        {
+          "name" : "TEZ_CLIENT"
+        },
+        
+        {
+          "name" : "HST_AGENT"
+        },
+        {
+          "name" : "MAPREDUCE2_CLIENT"
+        },
+        {
+          "name" : "ZOOKEEPER_SERVER"
+        },
+        {
+          "name" : "JOURNALNODE"
+        },
+        {
+          "name" : "APP_TIMELINE_SERVER"
+        },
+        {
+          "name" : "PHOENIX_QUERY_SERVER"
+        },
+        {
+          "name" : "RESOURCEMANAGER"
+        }
+      ],
+      "configurations" : [ ],
+      "name" : "host_group_3",
+      "cardinality" : "1"
+    },
+    {
+      "components" : [
+        {
+          "name" : "NODEMANAGER"
+        },
+        {
+          "name" : "YARN_CLIENT"
+        },
+        {
+          "name" : "HDFS_CLIENT"
+        },
+        {
+          "name" : "SPARK2_CLIENT"
+        },
+        {
+          "name" : "METRICS_MONITOR"
+        },
+        {
+          "name" : "INFRA_SOLR_CLIENT"
+        },
+        {
+          "name" : "TEZ_CLIENT"
+        },
+        {
+          "name" : "ZOOKEEPER_CLIENT"
+        },
+        {
+          "name" : "HCAT"
+        },
+        {
+          "name" : "PIG"
+        },
+        {
+          "name" : "HST_AGENT"
+        },
+        {
+          "name" : "MAPREDUCE2_CLIENT"
+        },
+        {
+          "name" : "SLIDER"
+        },
+        
+        {
+          "name" : "HBASE_REGIONSERVER"
+        },
+        {
+          "name" : "DATANODE"
+        },
+        {
+          "name" : "HBASE_CLIENT"
+        },
+        {
+          "name" : "HIVE_CLIENT"
+        }
+      ],
+      "configurations" : [ ],
+      "name" : "host_group_6",
+      "cardinality" : "3"
+    },
+    {
+      "components" : [
+        {
+          "name" : "YARN_CLIENT"
+        },
+        {
+          "name" : "HDFS_CLIENT"
+        },
+        {
+          "name" : "ZKFC"
+        },
+        {
+          "name" : "HIVE_SERVER"
+        },
+        {
+          "name" : "MYSQL_SERVER"
+        },
+        {
+          "name" : "HISTORYSERVER"
+        },
+        {
+          "name" : "METRICS_MONITOR"
+        },
+        {
+          "name" : "HIVE_METASTORE"
+        },
+        {
+          "name" : "NAMENODE"
+        },
+        {
+          "name" : "TEZ_CLIENT"
+        },
+        {
+          "name" : "ZOOKEEPER_CLIENT"
+        },
+        {
+          "name" : "PIG"
+        },
+        {
+          "name" : "WEBHCAT_SERVER"
+        },
+        {
+          "name" : "HST_AGENT"
+        },
+        {
+          "name" : "MAPREDUCE2_CLIENT"
+        },
+        {
+          "name" : "SLIDER"
+        },
+        {
+          "name" : "ZOOKEEPER_SERVER"
+        },
+        {
+          "name" : "JOURNALNODE"
+        },
+        
+        {
+          "name" : "HIVE_CLIENT"
+        },
+        {
+          "name" : "RESOURCEMANAGER"
+        }
+      ],
+      "configurations" : [ ],
+      "name" : "host_group_5",
+      "cardinality" : "1"
+    }
+  ],
+    "Blueprints" : 
+  {
+	"blueprint_name": "hdpspark",
+    "stack_name" : "HDP",
+    "stack_version" : "2.6"
+  }
+}

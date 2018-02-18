@@ -82,5 +82,19 @@ end
 service 'ambari-server' do
   status_command 'service ambari-server status'
   supports :status => true, :restart => true, :reload => false
-  action [:start, :enable]
+  #action [:start, :enable]
+  action [:restart, :enable]
 end
+
+
+
+execute 'setup_database_connection' do 
+ command 'ambari-server setup --jdbc-db=mysql --jdbc-driver=/usr/share/java/mysql-connector-java.jar'
+end
+
+
+
+#execute 'check_db_connection' do 
+# command 'mysql -h hdp-db01.gombe.com -u hive -p'
+#end
+

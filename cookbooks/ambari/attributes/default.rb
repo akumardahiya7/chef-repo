@@ -77,10 +77,14 @@ node.default['ambari']['admin_user'] = 'admin'
 node.default['ambari']['admin_password'] = 'admin'
 
 # DB attributes
-node.default['ambari']['database']['type'] = 'embedded' # embedded|mysql (can support following in the future oracle|mssql|postgres|sqlanywhere)
+#node.default['ambari']['database']['type'] = 'embedded' # embedded|mysql (can support following in the future oracle|mssql|postgres|sqlanywhere)
+node.default['ambari']['database']['type'] = 'mysql' # embedded|mysql (can support following in the future oracle|mssql|postgres|sqlanywhere)
 # These attributes below are omittied if database type is 'embedded'.
-node.default['ambari']['database']['host'] = 'localhost'
+#node.default['ambari']['database']['host'] = 'localhost'
+node.default['ambari']['database']['host'] = 'hdp-db01.gombe.com'
 node.default['ambari']['database']['port'] = '3306'
+#node.default['ambari']['database']['name'] = 'ambari'
+#node.default['ambari']['database']['name'] = 'ambari_db'
 node.default['ambari']['database']['name'] = 'ambari'
 node.default['ambari']['database']['username'] = 'ambari'
 node.default['ambari']['database']['password'] = 'bigdata'
