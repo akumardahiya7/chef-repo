@@ -190,6 +190,15 @@
       }
  },
  {
+      "mapred-site" : {
+        "properties" : {
+		 "yarn.app.mapreduce.am.resource.mb" : "1024",
+		 "mapreduce.map.memory.mb" : "1024",
+		 "mapreduce.task.io.sort.mb" : "573"
+		    }
+        }
+ },
+ {
       "hive-env" : {
         "properties" : {
           "hive_database" : "Existing MySQL Database",
@@ -555,6 +564,6 @@
   {
 	"blueprint_name": "hdpspark",
     "stack_name" : "HDP",
-    "stack_version" : "2.6"
+    "stack_version" : "2.6.0.3"
   }
 }

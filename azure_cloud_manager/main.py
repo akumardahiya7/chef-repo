@@ -1,5 +1,5 @@
 '''
-Azure HDP Manager: Implementation to manage HDP (Hortonworks Data Flatform) on Azure Cloud
+Azure HDP cluster: Implementation to manage HDP (Hortonworks Data Flatform) on Azure Cloud
 
 Version: v1.0 01/02/2018
 
@@ -12,21 +12,59 @@ import os
 import sys
 import argparse
 from subprocess import Popen, PIPE, STDOUT
+import yaml
+
+class cluster_init(object):
+	def __init__(cluster):
+		res = False
+		cluster.init = True
+		print("\nSuccessfully initilized Clusterr")
+		return
+
+	def config(cluster, config):
+		'''
+		cluster:
+			name: walgreens_hdp_spark
+			blueprint: walgreens_hdp_spark.json
+			hostmapping: walgreens_hdp_spark-hostmap.json
+			ambari: hdp-an01.gombe.com
+			nodes: 
+				- hdp-en01.gombe.com
+				- hdp-mn01.gombe.com
+				- hdp-mn02.gombe.com
+				- hdp-mn03.gombe.com
+				- hdp-sn01.gombe.com
+				- hdp-sn02.gombe.com
+		database:
+			host: hdp-db01.gombe.com
+			ambari: 
+				- name: ambari
+				- username: ambari
+				- passwd: bigdata 
+		'''
+		print "check"
+		print config
+		with open(config, 'r') as ymlfile:
+			cfg = yaml.load(ymlfile)
+
+		for section in cfg.config:
+			print(section)
+		print(cfg['cluster'])
+		print(cfg['database'])
+
+
+		return res
+		print sys._getframe().f_code.co_name + ": Exit "
 
 
 
-class azure_hdp_manager(object):
+
+
+class azure_hdp_manager_init(object):
 	def __init__(manager):
 		res = False
-#		print sys._getframe().f_code.co_name + ": IN"
 		manager.init = True
-		manager.workdir = "/home/akhanolk"
-		#manager.workdir = "/home/cddadmin"
-		manager.cluster_username = "cddadmin"
-		manager.cluster_privkey = "./cluster.privkey"
-		manager.chef_knife_config = manager.workdir + "/" + "chef-repo/.chef/knife.rb"
-#		print manager.chef_knife_config
-#		print sys._getframe().f_code.co_name + ": Exit "
+		print("\nSuccessfully initilized Azure HDP Cloud Manager")
 		return
 
 	def shell_cmd_exec(manager, cmd):
@@ -59,7 +97,7 @@ class azure_hdp_manager(object):
 					+ " " + str(manager.args.ambarinode[0])
 				
 		print "\n" + cmd 
-		res = manager.shell_cmd_exec(cmd)
+#		res = manager.shell_cmd_exec(cmd)
 		return res
 		print sys._getframe().f_code.co_name + ": Exit "
 
@@ -81,7 +119,7 @@ class azure_hdp_manager(object):
 						+ " --config " + manager.chef_knife_config \
 						+ " " + str(node)
 			print "\n" + cmd 
-			res = manager.shell_cmd_exec(cmd)
+#			res = manager.shell_cmd_exec(cmd)
 			print res
 		print sys._getframe().f_code.co_name + ": Exit "
 
@@ -108,7 +146,7 @@ class azure_hdp_manager(object):
 							+ " -d @" +  str(manager.args.blueprint)
 
 		print "\n" + cmd 
-		res = manager.shell_cmd_exec(cmd)
+#		res = manager.shell_cmd_exec(cmd)
 		return res
 
 	def hdp_installation(manager):
@@ -132,63 +170,41 @@ class azure_hdp_manager(object):
 							+ " -d @" +  str(manager.args.hostmap)
 
 		print "\n" + cmd 
-		res = manager.shell_cmd_exec(cmd)
+#		res = manager.shell_cmd_exec(cmd)
 		return res
 		print sys._getframe().f_code.co_name + ": Exit "
 
 
-	
+
+
 
 	def parse_args(manager):
-		print sys._getframe().f_code.co_name + ": IN"
 		manager.parser = argparse.ArgumentParser(description='Manages Hortonworks HDP on Azure Cloud.')
-		manager.parser.add_argument('-a', '--ambarinode', nargs='+',\
-											help='HDP ambari node hostname')
-		manager.parser.add_argument('-n', '--hdpnodes', nargs='+',\
-											help='List of HDP nodes hostnames')
-		manager.parser.add_argument('-b', '--blueprint',\
-				 							help='HDP Cluster Blueprint JSON file')
-		manager.parser.add_argument('-m', '--hostmap',\
-											help='HDP Cluster hostname mapping JSON file')
-
+		manager.parser.add_argument('-c', '--config', nargs='+',\
+											help='HDP Cluster YAML Config file')
 		manager.args = manager.parser.parse_args()
-		print "HDP ambari node: " + str(manager.args.ambarinode)
-		print "HDP nodes: " + str(manager.args.hdpnodes)
-		print "Blueprint JSON file pathname: " + str(manager.args.blueprint)
-		print "Hostmapping JSON file pathname: " + str(manager.args.hostmap)
-		print sys._getframe().f_code.co_name + ": Exit "
-
+		if manager.args is None:
+			manager.parser.print_help()	
+			return
 		return manager.args
 
 	def process_args(manager):
-		print sys._getframe().f_code.co_name + ": IN"
-		if manager.args.ambarinode is None:
-			print "Error: HDP ambari node hostname is missing"
-			manager.parser.print_help()	
-			return
-			
-		if manager.args.hdpnodes is None:
-			print "Error: List of HDP nodes hostname is missing"
+		if manager.args.config is None:
+			print "\nError: HDP Cluster Configurartion file is missing"
 			manager.parser.print_help()	
 			return
 
-		if manager.args.blueprint is None:
-			print "Error: HDP Cluster Blueprint JSON file pathname is missing"
-			manager.parser.print_help()	
-			return
+		cluster = cluster_init()
+		cluster.config(str(manager.args.config[0]))
+#		cluster_config_init()
 
-		if manager.args.hostmap is None:
-			print "Error: HDP Cluster hostname mapping JSON file pathname is missing" 
-			manager.parser.print_help()	
-			return
+#		manager.hdp_ambari_server_node_configure()
 
-		manager.hdp_ambari_server_node_configure()
+#		manager.hdp_ambari_agent_node_configure()
 
-		manager.hdp_ambari_agent_node_configure()
+#		manager.hdp_blueprint_create()
 
-		manager.hdp_blueprint_create()
-
-		manager.hdp_installation()
+#		manager.hdp_installation()
 		print sys._getframe().f_code.co_name + ": Exit "
 
 
@@ -197,12 +213,8 @@ if __name__ == '__main__':
 	''' main entry point '''
 	sys.stdout = os.fdopen(sys.stdout.fileno(), 'w', 0)
 	res = ''
-	#initialize hdp manager
-	manager = azure_hdp_manager()
 
-	# parse command line arguments
+	manager = azure_hdp_manager_init()
 	args = manager.parse_args()
-
-	# process command line argument
 	res = manager.process_args()
 

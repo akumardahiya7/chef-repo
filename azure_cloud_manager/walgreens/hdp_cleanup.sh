@@ -399,5 +399,3 @@ find / -name *zookeeper*
 #rm -rf /var/lib/ambari-server
 #rm -rf /var/run/ambari-server
 #rm -rf /var/log/ambari-server
-
-

@@ -6,7 +6,7 @@
       "name" : "host_group_master_1",
       "hosts" : [
         {
-          "fqdn" : "anil-hdp-mn-1.hashmap.net"
+          "fqdn" : "hdp-mn01.gombe.com"
         }
       ]
     },
@@ -14,7 +14,7 @@
       "name" : "host_group_master_2",
       "hosts" : [
         {
-          "fqdn" : "anil-hdp-mn-2.hashmap.net"
+          "fqdn" : "hdp-mn02.gombe.com"
         }
       ]
     },
@@ -22,7 +22,7 @@
       "name" : "host_group_master_3",
       "hosts" : [
         {
-          "fqdn" : "anil-hdp-mn-3.hashmap.net"
+          "fqdn" : "hdp-mn03.gombe.com"
         }
       ]
     },
@@ -30,7 +30,7 @@
       "name" : "host_group_client_1",
       "hosts" : [
         {
-          "fqdn" : "anil-hdp-en.hashmap.net"
+          "fqdn" : "hdp-en01.gombe.com"
         }
       ]
     },
@@ -38,16 +38,15 @@
       "name" : "host_group_slave_1",
       "hosts" : [
         {
-          "fqdn" : "anil-hdp-sn-1.hashmap.net",
+          "fqdn" : "hdp-sn01.gombe.com"
         },
         {
-          "fqdn" : "anil-hdp-sn-2.hashmap.net",
+          "fqdn" : "hdp-sn02.gombe.com"
         },
         {
-          "fqdn" : "anil-hdp-sn-3.hashmap.net",
+          "fqdn" : "hdp-sn03.gombe.com"
         }
       ]
     }
   ]
 }
-

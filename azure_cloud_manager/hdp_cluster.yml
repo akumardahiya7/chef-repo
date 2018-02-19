@@ -1,0 +1,21 @@
+cluster:
+    name: hdp_spark2
+    blueprint: ./hdp_spark2.json
+    hostmap: ./hdp_spark2_hostmap.json
+    ssh: 
+        username: cddadmin
+        privkey: ./priv-akhanolk
+    ambari: hdp-an01.gombe.com
+    nodes: 
+        - hdp-en01.gombe.com
+        - hdp-mn01.gombe.com
+        - hdp-mn02.gombe.com
+        - hdp-mn03.gombe.com
+        - hdp-sn01.gombe.com
+        - hdp-sn02.gombe.com
+database:
+    host: hdp-db01.gombe.com
+    ambari: 
+        - name: ambari
+#        - username: ambari
+#        - passwd: bigdata 
