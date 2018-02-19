@@ -27,8 +27,8 @@ class cluster_init(object):
 	def shell_cmd_exec(manager, cmd):
 		res = []
 
-#		print "\n" + cmd 
-		return res
+		print "\n" + cmd 
+#		return res
 
 		process = Popen(cmd, bufsize=2048, stdin=PIPE, stdout=PIPE, shell=True)
 		(child_stdin, child_stdout) = (process.stdin, process.stdout)
@@ -186,7 +186,7 @@ class cluster_init(object):
 		print "\nInstalling HDP Clutser: " + cluster.name + " ..." 
 		cmd = 'curl -H "X-Requested-By: ambari" -X POST -u admin:admin'\
 					+ " http://" + cluster.ambari \
-					+ ":8080/api/v1/blueprints/" + cluster.name \
+					+ ":8080/api/v1/clusters/" + cluster.name \
 					+ " -d @" +  str(cluster.hostmap)
 
 		res = cluster.shell_cmd_exec(cmd)

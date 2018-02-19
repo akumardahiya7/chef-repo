@@ -258,6 +258,7 @@ rm -rf /var/log/livy2
 yum -y remove zeppelin\*
 rm -rf /etc/zeppelin
 rm -rf /var/log/zeppelin
+rm -rf /var/run/zeppelin*
 
 rm -rf /etc/phoenix
 rm -f /usr/bin/phoenix-psql
