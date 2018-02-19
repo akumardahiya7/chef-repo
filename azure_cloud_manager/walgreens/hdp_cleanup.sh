@@ -18,7 +18,6 @@ rm -rf /var/lib/ambari-agent
 rm -rf /var/run/ambari-agent
 rm -rf /var/log/ambari-agent
 
-rm -rf /etc/chef
 
 #ambar-server
 #ambari-server stop
