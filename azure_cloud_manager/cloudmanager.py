@@ -28,7 +28,7 @@ class cluster_init(object):
 	def shell_cmd_exec(manager, cmd):
 		res = []
 
-#		print "\n" + cmd 
+		print "\n" + cmd 
 #		return res
 
 		process = Popen(cmd, bufsize=2048, stdin=PIPE, stdout=PIPE, shell=True)
@@ -113,8 +113,17 @@ class cluster_init(object):
 		cluster.ambari_passwd = cluster.config['cluster']['ambari']['passwd']
 		#print "\nHDP Cluster Ambari Server admin password: " + cluster.ambari_passwd
 
+		cluster.ambari_db_type = cluster.config['cluster']['ambari']['database']['type']
+		print "\nHDP Cluster Ambari Server database type: " + cluster.ambari_db_type
+
 		cluster.ambari_db_host = cluster.config['cluster']['ambari']['database']['host']
 		print "\nHDP Cluster Ambari Server database host: " + cluster.ambari_db_host
+
+		cluster.ambari_db_port = cluster.config['cluster']['ambari']['database']['port']
+		print "\nHDP Cluster Ambari Server database port: " + str(cluster.ambari_db_port)
+
+		cluster.ambari_db_name = cluster.config['cluster']['ambari']['database']['name']
+		print "\nHDP Cluster Ambari Server database name: " + cluster.ambari_db_name
 
 		cluster.ambari_db_username = cluster.config['cluster']['ambari']['database']['username']
 		print "\nHDP Cluster Ambari Server database username: " + cluster.ambari_db_username
@@ -131,12 +140,29 @@ class cluster_init(object):
 		#knife bootstrap -i ~/cluster-ssh-privkey -x cddadmin --sudo -r role['ambari-server'] hdp-en01
 #		print sys._getframe().f_code.co_name + ": IN"
 		res = []
+		print "Configure ambari node"
+
+
+		data = {}  
+		data['ambari'] = {} 
+		data['ambari']['database'] = {}
+		data['ambari']['database']['type'] = cluster.ambari_db_type 
+		data['ambari']['database']['host'] = cluster.ambari_db_host
+		data['ambari']['database']['port'] = cluster.ambari_db_port
+		data['ambari']['database']['name'] = cluster.ambari_db_name
+		data['ambari']['database']['username'] = cluster.ambari_db_username
+		data['ambari']['database']['password'] = cluster.ambari_db_passwd
+
+		json_data = json.dumps(data)
+		print json_data
+
 		role = "role['ambari-server']"
 		print "\nHDP Cluster Name: " + cluster.name
 		cmd = "knife bootstrap --sudo " \
 				+ " -i " + cluster.ssh_key \
 				+ " -x " + cluster.username \
 				+ " -r " + role \
+				+ " -j " + "'" + json_data + "'" \
 				+ " " + cluster.ambari_host
 				
 		print("\nConfiguring ambari server ...")
@@ -288,6 +314,42 @@ class cluster_init(object):
 		print "\nSucessfully started HDP cluster " + cluster.name 
 		return res
 
+	def hdp_cluster_start(cluster, manager):
+		'''
+		Start HDP cluster
+
+		Example:
+		$curl -u admin:admin -i -H 'X-Requested-By: ambari' -X PUT -d \
+				'{"RequestInfo": \
+					{"context": "_PARSE_.START.ALL_SERVICES","operation_level": \
+						{"level":"CLUSTER","cluster_name":"hdpspark"}\
+					},\
+					"Body": {"ServiceInfo":	{"state":"STARTED"}}\
+				}'\
+				http://hdp-an01.gombe.com:8080/api/v1/clusters/hdpspark/services
+		'''
+
+		print "\nStarting all services of HDP Clutser: " + cluster.name + " ..." 
+		cmd = 'curl -i -H "X-Requested-By: ambari" -X PUT '\
+				+ ' -u ' + cluster.ambari_username + ':' + cluster.ambari_passwd \
+				+ ' -d ' \
+				+ "'" + '{"RequestInfo": '\
+					+ '{"context": "_PARSE_.START.ALL_SERVICES","operation_level":'\
+						+ '{"level":"CLUSTER","cluster_name":"' + cluster.name + '"}' \
+					+ '},'\
+					+ ' "Body": {"ServiceInfo": {"state":"STARTED"}}'\
+				+ '}' +  "'" \
+				+ " http://" + cluster.ambari_host + ":8080/api/v1/clusters/" + cluster.name + '/services'
+		res = cluster.shell_cmd_exec(cmd)
+		print json.dumps(res, indent=4)
+		json_string = json.dumps(res)
+		datastore = json.loads(json_string) 
+		print datastore[16]
+	
+		print "\nSucessfully started HDP cluster " + cluster.name 
+		return res
+
+
 
 '''
 Azure Cloud Manager to interact with outside world
@@ -324,9 +386,9 @@ class azure_hdp_manager_init(object):
 		cluster = cluster_init()
 		cluster.hdp_config(str(manager.args.config[0]))
 		cluster.hdp_ambari_configure(manager)
-		cluster.hdp_nodes_configure(manager)
-		cluster.hdp_blueprint_create(manager)
-		cluster.hdp_installation(manager)
+		#cluster.hdp_nodes_configure(manager)
+		#cluster.hdp_blueprint_create(manager)
+		#cluster.hdp_installation(manager)
 #		cluster.hdp_cluster_stop(manager)
 #		cluster.hdp_cluster_start(manager)
 
