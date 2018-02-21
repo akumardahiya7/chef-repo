@@ -97,4 +97,10 @@ end
 #execute 'check_db_connection' do 
 # command 'mysql -h hdp-db01.gombe.com -u hive -p'
 #end
+log 'a string to log'
+log "#{node['ambari']['database']['host']}"
 
+log 'message' do
+  message "#{node['ambari']['database']['host']}"
+  level :info
+end

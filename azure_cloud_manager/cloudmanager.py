@@ -14,6 +14,8 @@ import argparse
 from subprocess import Popen, PIPE, STDOUT
 import yaml
 import json
+import requests
+import time
 
 '''
 HDP Cluster related to operations 
@@ -28,7 +30,7 @@ class cluster_init(object):
 	def shell_cmd_exec(manager, cmd):
 		res = []
 
-		print "\n" + cmd 
+#		print "\n" + cmd 
 #		return res
 
 		process = Popen(cmd, bufsize=2048, stdin=PIPE, stdout=PIPE, shell=True)
@@ -78,8 +80,8 @@ class cluster_init(object):
 
 #		for section in cluster.config:
 #			print(section)
-		print "\nPassed HDP Cluster configuration is: "
-		print(cluster.config['cluster'])
+		#print "\nPassed HDP Cluster configuration is: "
+		#print(cluster.config['cluster'])
 
 		cluster.name = cluster.config['cluster']['name']
 		print "\nHDP Cluster Name: " + cluster.name
@@ -140,7 +142,7 @@ class cluster_init(object):
 		#knife bootstrap -i ~/cluster-ssh-privkey -x cddadmin --sudo -r role['ambari-server'] hdp-en01
 #		print sys._getframe().f_code.co_name + ": IN"
 		res = []
-		print "Configure ambari node"
+	#	print "Configure ambari node"
 
 
 		data = {}  
@@ -154,10 +156,10 @@ class cluster_init(object):
 		data['ambari']['database']['password'] = cluster.ambari_db_passwd
 
 		json_data = json.dumps(data)
-		print json_data
+#		print json_data
 
 		role = "role['ambari-server']"
-		print "\nHDP Cluster Name: " + cluster.name
+#		print "\nHDP Cluster Name: " + cluster.name
 		cmd = "knife bootstrap --sudo " \
 				+ " -i " + cluster.ssh_key \
 				+ " -x " + cluster.username \
@@ -227,6 +229,56 @@ class cluster_init(object):
 		print "\nSucessfully uploaded HDP blueprint " + cluster.blueprint 
 		return res
 
+
+	def hdp_installation_status(cluster, manager):
+		'''
+		Install HDP cluster using blueprint	
+
+		Example:
+		$curl -H "X-Requested-By: ambari" -X POST -u admin:admin \
+					http://hdp-en01:8080/api/v1/clusters/hdp-small-default -d @hostmap.json
+		'''
+
+	#	res = []
+	#	headers = {'X-Requested-By': 'ambari'}
+	#	url = 'http://' + cluster.ambari_host + ':8080/api/v1/clusters/' + cluster.name
+	#	print url
+
+	#	data = json.loads(open(cluster.hostmap).read())
+	#	print data
+	#	res = requests.post(url, headers=headers, params=data, auth=(cluster.ambari_username, cluster.ambari_passwd))
+	#	print res
+	#	print res.text
+		#if res.raise_for_status() is not None:
+		#	print "Error: Uploading blueprint," + res.text
+		#	return False
+
+	#	result = res.json().get('items')
+	#	url = result[0]['href']
+		headers = {'X-Requested-By': 'ambari'}
+		url = 'http://' + cluster.ambari_host + ':8080/api/v1/clusters/' + cluster.name + "/requests/1"
+	#	print url
+
+		res = requests.get(url, headers=headers, auth=(cluster.ambari_username, cluster.ambari_passwd))
+	#	print res
+
+		print "\nHDP Cluster installation progress (%):"
+		progress = 0
+		while progress < 100:
+			res = requests.get(url, headers=headers, auth=(cluster.ambari_username, cluster.ambari_passwd))
+			if res.raise_for_status() is not None:
+				print "Error: HDP installation has failed"
+				return False
+			result = res.json().get('Requests')
+			progress = result['progress_percent']
+			time.sleep( 5 )
+    			sys.stdout.write("\r%d%%" % progress)
+			sys.stdout.flush()
+
+		print "\n Cluster build is complete"
+		return res
+
+
 	def hdp_installation(cluster, manager):
 		'''
 		Install HDP cluster using blueprint	
@@ -244,7 +296,7 @@ class cluster_init(object):
 				+ " -d @" +  str(cluster.hostmap)
 
 		res = cluster.shell_cmd_exec(cmd)
-		print "\nHDP Cluster installation has been started, Check the progress using link:"
+		print "\nHDP Cluster installation has been started, access HDP Ambari dashboard using link:"
 		print '\nhttp://' + cluster.ambari_host + ':8080/\n'
 		return res
 
@@ -386,9 +438,10 @@ class azure_hdp_manager_init(object):
 		cluster = cluster_init()
 		cluster.hdp_config(str(manager.args.config[0]))
 		cluster.hdp_ambari_configure(manager)
-		#cluster.hdp_nodes_configure(manager)
-		#cluster.hdp_blueprint_create(manager)
-		#cluster.hdp_installation(manager)
+		cluster.hdp_nodes_configure(manager)
+		cluster.hdp_blueprint_create(manager)
+		cluster.hdp_installation(manager)
+		cluster.hdp_installation_status(manager)
 #		cluster.hdp_cluster_stop(manager)
 #		cluster.hdp_cluster_start(manager)
 
