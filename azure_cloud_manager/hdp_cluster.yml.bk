@@ -5,14 +5,7 @@ cluster:
     ssh: 
         username: cddadmin
         privkey: priv-akhanolk
-    ambari:
-        host: hdp-an01.gombe.com 
-        username: admin 
-        passwd: admin 
-        database:
-           host: hdp-db01.gombe.com
-           username: ambari 
-           passwd: bigdata 
+    ambari: hdp-an01.gombe.com
     nodes: 
         - hdp-en01.gombe.com
         - hdp-mn01.gombe.com
@@ -21,3 +14,9 @@ cluster:
         - hdp-sn01.gombe.com
         - hdp-sn02.gombe.com
         - hdp-sn03.gombe.com
+database:
+    host: hdp-db01.gombe.com
+    ambari: 
+        - name: ambari
+#        - username: ambari
+#        - passwd: bigdata 

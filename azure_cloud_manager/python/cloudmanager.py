@@ -28,8 +28,8 @@ class cluster_init(object):
 	def shell_cmd_exec(manager, cmd):
 		res = []
 
-#		print "\n" + cmd 
-#		return res
+		print "\n" + cmd 
+		return res
 
 		process = Popen(cmd, bufsize=2048, stdin=PIPE, stdout=PIPE, shell=True)
 		(child_stdin, child_stdout) = (process.stdin, process.stdout)
@@ -39,8 +39,8 @@ class cluster_init(object):
 			# the real code does filtering here
 			line = line.rstrip()
 			res.append(line)
-#			print line
-#		print "Shell command returned output: " + str(res)
+			print line
+		print "Shell command returned output: " + str(res)
 		return res
 
 	def json_validator(cluster, filename):
@@ -80,6 +80,7 @@ class cluster_init(object):
 #			print(section)
 		print "\nPassed HDP Cluster configuration is: "
 		print(cluster.config['cluster'])
+		print(cluster.config['database'])
 
 		cluster.name = cluster.config['cluster']['name']
 		print "\nHDP Cluster Name: " + cluster.name
@@ -104,23 +105,9 @@ class cluster_init(object):
 		cluster.ssh_key = cluster.config['cluster']['ssh']['privkey']
 		print "\nHDP Cluster SSH private keyfile: " + cluster.ssh_key
 
-		cluster.ambari_host = cluster.config['cluster']['ambari']['host']
-		print "\nHDP Cluster Ambari Server node host: " + cluster.ambari_host
-
-		cluster.ambari_username = cluster.config['cluster']['ambari']['username']
-		print "\nHDP Cluster Ambari Server admin username: " + cluster.ambari_username
-
-		cluster.ambari_passwd = cluster.config['cluster']['ambari']['passwd']
-		#print "\nHDP Cluster Ambari Server admin password: " + cluster.ambari_passwd
-
-		cluster.ambari_db_host = cluster.config['cluster']['ambari']['database']['host']
-		print "\nHDP Cluster Ambari Server database host: " + cluster.ambari_db_host
-
-		cluster.ambari_db_username = cluster.config['cluster']['ambari']['database']['username']
-		print "\nHDP Cluster Ambari Server database username: " + cluster.ambari_db_username
-
-		cluster.ambari_db_passwd = cluster.config['cluster']['ambari']['database']['passwd']
-		#print "\nHDP Cluster Ambari Server database password: " + cluster.ambari_db_passwd
+		cluster.ambari = cluster.config['cluster']['ambari']
+		cluster.ambari.host = cluster.config['cluster']['ambari']['host']
+		print "\nHDP Cluster Ambari Server: " + cluster.ambari.host
 
 		print "\nHDP Cluster Nodes are:" 
 		print(cluster.config['cluster']['nodes'])
@@ -137,7 +124,7 @@ class cluster_init(object):
 				+ " -i " + cluster.ssh_key \
 				+ " -x " + cluster.username \
 				+ " -r " + role \
-				+ " " + cluster.ambari_host
+				+ " " + cluster.ambari
 				
 		print("\nConfiguring ambari server ...")
 		res = cluster.shell_cmd_exec(cmd)
@@ -193,10 +180,10 @@ class cluster_init(object):
 		res = []
 
 		print "\nUploading HDP blueprint: " + cluster.blueprint + " ..." 
-		cmd = 'curl -H "X-Requested-By: ambari" -X POST '\
-				+ ' -u ' + cluster.ambari_username + ':' + cluster.ambari_passwd \
-				+ ' http://' + cluster.ambari_host + ':8080/api/v1/blueprints/' + cluster.name \
-				+ ' -d @' +  str(cluster.blueprint)
+		cmd = 'curl -H "X-Requested-By: ambari" -X POST -u admin:admin' \
+					+ " http://" + cluster.ambari \
+					+ ":8080/api/v1/blueprints/" + cluster.name \
+					+ " -d @" +  str(cluster.blueprint)
 		res = cluster.shell_cmd_exec(cmd)
 		print "\nSucessfully uploaded HDP blueprint " + cluster.blueprint 
 		return res
@@ -212,14 +199,13 @@ class cluster_init(object):
 
 		res = []
 		print "\nInstalling HDP Clutser: " + cluster.name + " ..." 
-		cmd = 'curl -H "X-Requested-By: ambari" -X POST '\
-				+ ' -u ' + cluster.ambari_username + ':' + cluster.ambari_passwd \
-				+ " http://" + cluster.ambari_host + ":8080/api/v1/clusters/" + cluster.name \
-				+ " -d @" +  str(cluster.hostmap)
+		cmd = 'curl -H "X-Requested-By: ambari" -X POST -u admin:admin'\
+					+ " http://" + cluster.ambari \
+					+ ":8080/api/v1/clusters/" + cluster.name \
+					+ " -d @" +  str(cluster.hostmap)
 
 		res = cluster.shell_cmd_exec(cmd)
-		print "\nHDP Cluster installation has been started, Check the progress using link:"
-		print '\nhttp://' + cluster.ambari_host + ':8080/\n'
+		print "\nSucessfully created HDP cluster " + cluster.name 
 		return res
 
 	def hdp_cluster_stop(cluster, manager):
@@ -231,63 +217,22 @@ class cluster_init(object):
 				'{"RequestInfo": \
 					{"context": "_PARSE_.STOP.ALL_SERVICES","operation_level": \
 						{"level":"CLUSTER","cluster_name":"hdpspark"}\
-					},\
-					"Body": {"ServiceInfo":	{"state":"INSTALLED"}}\
-				}'\
-				http://hdp-an01.gombe.com:8080/api/v1/clusters/hdpspark/services
+					},"Body": {"ServiceInfo":\
+						{"state":"INSTALLED"}\
+					}\
+				}' http://hdp-an01.gombe.com:8080/api/v1/clusters/hdpspark/services
 		'''
 
-		print "\nStopping all services of HDP Clutser: " + cluster.name + " ..." 
-#		cmd = 'curl -i -H "X-Requested-By: ambari"-X PUT '\
-#				+ ' -u ' + cluster.ambari_username + ':' + cluster.ambari_passwd \
-#				+ ' -d {"RequestInfo": '\
-#					+ '{"context": "_PARSE_.STOP.ALL_SERVICES","operation_level":'\
-#						+ '{"level":"CLUSTER","cluster_name":"' + cluster.name + '"}' \
-#					+ '},'\
-#					+ ' "Body": {"ServiceInfo": {"state":"INSTALLED"}}'\
-#				+ '}'\
-#				+ " http://" + cluster.ambari_host \
-#					+ ":8080/api/v1/clusters/" + cluster.name + '/services'\
-#
-#		res = cluster.shell_cmd_exec(cmd)
-		print "\nSucessfully stopped HDP cluster " + cluster.name 
-		return res
+		res = []
+		print "\nInstalling HDP Clutser: " + cluster.name + " ..." 
+		cmd = 'curl -H "X-Requested-By: ambari" -X POST -u admin:admin'\
+					+ " http://" + cluster.ambari \
+					+ ":8080/api/v1/clusters/" + cluster.name \
+					+ " -d @" +  str(cluster.hostmap)
 
-	def hdp_cluster_start(cluster, manager):
-		'''
-		Start HDP cluster
-
-		Example:
-		$curl -u admin:admin -i -H 'X-Requested-By: ambari' -X PUT -d \
-				'{"RequestInfo": \
-					{"context": "_PARSE_.START.ALL_SERVICES","operation_level": \
-						{"level":"CLUSTER","cluster_name":"hdpspark"}\
-					},\
-					"Body": {"ServiceInfo":	{"state":"STARTED"}}\
-				}'\
-				http://hdp-an01.gombe.com:8080/api/v1/clusters/hdpspark/services
-		'''
-
-		print "\nStarting all services of HDP Clutser: " + cluster.name + " ..." 
-		cmd = 'curl -i -H "X-Requested-By: ambari" -X PUT '\
-				+ ' -u ' + cluster.ambari_username + ':' + cluster.ambari_passwd \
-				+ ' -d ' \
-				+ "'" + '{"RequestInfo": '\
-					+ '{"context": "_PARSE_.START.ALL_SERVICES","operation_level":'\
-						+ '{"level":"CLUSTER","cluster_name":"' + cluster.name + '"}' \
-					+ '},'\
-					+ ' "Body": {"ServiceInfo": {"state":"STARTED"}}'\
-				+ '}' +  "'" \
-				+ " http://" + cluster.ambari_host + ":8080/api/v1/clusters/" + cluster.name + '/services'
 		res = cluster.shell_cmd_exec(cmd)
-		print json.dumps(res, indent=4)
-		json_string = json.dumps(res)
-		datastore = json.loads(json_string) 
-		print datastore[16]
-	
-		print "\nSucessfully started HDP cluster " + cluster.name 
+		print "\nSucessfully created HDP cluster " + cluster.name 
 		return res
-
 
 '''
 Azure Cloud Manager to interact with outside world
@@ -303,12 +248,12 @@ class azure_hdp_manager_init(object):
 		manager.parser = argparse.ArgumentParser(description='Manages Hortonworks HDP on Azure Cloud.')
 		manager.parser.add_argument('-c', '--config', nargs='+',\
 						help='HDP Cluster YAML Config file')
-		manager.parser.add_argument('--start', nargs='?',\
+		manager.parser.add_argument('--start', nargs='+',\
 						help='Start all HDP Cluster Services')
-#		manager.parser.add_argument('--stop', nargs='?',\
-#						help='Stop all HDP Cluster Services')
-#		manager.parser.add_argument('--restart', nargs='+',\
-#						help='Restart all HDP Cluster Services')
+		manager.parser.add_argument('--stop', nargs='+',\
+						help='Stop all HDP Cluster Services')
+		manager.parser.add_argument('--restart', nargs='+',\
+						help='Restart all HDP Cluster Services')
 		manager.args = manager.parser.parse_args()
 		if manager.args is None:
 			manager.parser.print_help()	
@@ -323,12 +268,10 @@ class azure_hdp_manager_init(object):
 
 		cluster = cluster_init()
 		cluster.hdp_config(str(manager.args.config[0]))
-		cluster.hdp_ambari_configure(manager)
-		cluster.hdp_nodes_configure(manager)
-		cluster.hdp_blueprint_create(manager)
-		cluster.hdp_installation(manager)
-#		cluster.hdp_cluster_stop(manager)
-#		cluster.hdp_cluster_start(manager)
+#		cluster.hdp_ambari_configure(manager)
+#		cluster.hdp_nodes_configure(manager)
+#		cluster.hdp_blueprint_create(manager)
+#		cluster.hdp_installation(manager)
 
 if __name__ == '__main__':
 	''' main entry point '''
