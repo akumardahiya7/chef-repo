@@ -203,6 +203,7 @@ yum -y remove smartsense\*
 rm -rf /var/lib/smartsense*
 rm -rf /var/log/smartsense*
 rm -rf /var/run/smartsense*
+rm -rf /etc/smartsense*
 
 # accumulo
 yum -y remove accumulo\*

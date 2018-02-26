@@ -35,3 +35,9 @@ search(:users, '*:*').each do |u|
     content u['id_rsa']
   end
 end
+
+
+yum_package 'mariadb' do
+	action :install
+	ignore_failure true
+end

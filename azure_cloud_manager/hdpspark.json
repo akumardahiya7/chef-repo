@@ -1,51 +1,58 @@
 {
-"configurations" : [
- { 
-	"core-site": 
-	{
-		"properties" : 
-		{
-			"fs.defaultFS" : "hdfs://hdpspark",
-			"ha.zookeeper.quorum" : "%HOSTGROUP::host_group_3%:2181,%HOSTGROUP::host_group_4%:2181,%HOSTGROUP::host_group_5%:2181",
-			"fs.trash.interval": "4320"
+  "configurations" : [
+    {
+      "core-site" : {
+        "properties" : {
+          "fs.defaultFS" : "hdfs://hdpspark",
+          "hadoop.proxyuser.yarn.hosts" : "%HOSTGROUP::host_group_3%,%HOSTGROUP::host_group_5%",
+          "ha.zookeeper.quorum" : "%HOSTGROUP::host_group_3%:2181,%HOSTGROUP::host_group_4%:2181,%HOSTGROUP::host_group_5%:2181"
+        }
+      }
+    },
+    {
+      "hbase-site" : {
+        "properties_attributes" : { },
+        "properties" : {
+          "hbase.zookeeper.quorum" : "%HOSTGROUP::host_group_3%,%HOSTGROUP::host_group_4%,%HOSTGROUP::host_group_5%",
+          "hbase.rootdir" : "hdfs://hdpspark/apps/hbase/data"
+        }
+      }
+    },
+    {
+      "hdfs-site" : {
+        "properties" : {
+          "dfs.client.failover.proxy.provider.hdpspark" : "org.apache.hadoop.hdfs.server.namenode.ha.ConfiguredFailoverProxyProvider",
+		  "dfs.ha.automatic-failover.enabled" : "true",
+		  "dfs.ha.fencing.methods" : "shell(/bin/true)",
+		  "dfs.ha.namenodes.hdpspark" : "nn1,nn2",
+		  "dfs.namenode.http-address" : "%HOSTGROUP::host_group_3%:50070",
+		  "dfs.namenode.http-address.hdpspark.nn1" : "%HOSTGROUP::host_group_3%:50070",
+		  "dfs.namenode.http-address.hdpspark.nn2" : "%HOSTGROUP::host_group_5%:50070",
+		  "dfs.namenode.https-address" : "%HOSTGROUP::host_group_3%:50470",
+		  "dfs.namenode.https-address.hdpspark.nn1" : "%HOSTGROUP::host_group_3%:50470",
+		  "dfs.namenode.https-address.hdpspark.nn2" : "%HOSTGROUP::host_group_5%:50470",
+		  "dfs.namenode.rpc-address.hdpspark.nn1" : "%HOSTGROUP::host_group_3%:8020",
+		  "dfs.namenode.rpc-address.hdpspark.nn2" : "%HOSTGROUP::host_group_5%:8020",
+		  "dfs.namenode.shared.edits.dir" : "qjournal://%HOSTGROUP::host_group_3%:8485;%HOSTGROUP::host_group_4%:8485;%HOSTGROUP::host_group_5%:8485/hdpspark",
+		  "dfs.nameservices" : "hdpspark",
+		  "dfs.namenode.name.dir" : "/hadoop/hdfs/namenode",
+		  "dfs.datanode.data.dir" : "/hadoop/hdfs/data",
+		  "dfs.namenode.safemode.threshold-pct": "0.99"
 		}
-	}
- },
- { 
-	"hdfs-site": 
-	{
-		"properties" : 
-		{
-			"dfs.client.failover.proxy.provider.hdpspark" : "org.apache.hadoop.hdfs.server.namenode.ha.ConfiguredFailoverProxyProvider",
-			"dfs.ha.automatic-failover.enabled" : "true",
-			"dfs.ha.fencing.methods" : "shell(/bin/true)",
-			"dfs.ha.namenodes.hdpspark" : "nn1,nn2",
-			"dfs.namenode.http-address" : "%HOSTGROUP::host_group_3%:50070",
-			"dfs.namenode.http-address.hdpspark.nn1" : "%HOSTGROUP::host_group_3%:50070",
-			"dfs.namenode.http-address.hdpspark.nn2" : "%HOSTGROUP::host_group_5%:50070",
-			"dfs.namenode.https-address" : "%HOSTGROUP::host_group_3%:50470",
-			"dfs.namenode.https-address.hdpspark.nn1" : "%HOSTGROUP::host_group_3%:50470",
-			"dfs.namenode.https-address.hdpspark.nn2" : "%HOSTGROUP::host_group_5%:50470",
-			"dfs.namenode.rpc-address.hdpspark.nn1" : "%HOSTGROUP::host_group_3%:8020",
-			"dfs.namenode.rpc-address.hdpspark.nn2" : "%HOSTGROUP::host_group_5%:8020",
-			"dfs.namenode.shared.edits.dir" : "qjournal://%HOSTGROUP::host_group_3%:8485;%HOSTGROUP::host_group_4%:8485;%HOSTGROUP::host_group_5%:8485/hdpspark",
-			"dfs.nameservices" : "hdpspark",
-			"dfs.namenode.safemode.threshold-pct": "0.99"
-		}
-	}
- },
- {
+      }
+    },
+    {
       "yarn-site" : {
         "properties_attributes" : { },
         "properties" : {
           "yarn.log-aggregation.file-formats" : "IndexedFormat,TFile",
-          "yarn.resourcemanager.zk-address" : "%HOSTGROUP::host_group_4%:2181,%HOSTGROUP::host_group_5%:2181,%HOSTGROUP::host_group_3%:2181",
+          "yarn.resourcemanager.zk-address" : "%HOSTGROUP::host_group_5%:2181,%HOSTGROUP::host_group_3%:2181,%HOSTGROUP::host_group_4%:2181",
           "yarn.nodemanager.container-monitor.interval-ms" : "3000",
           "yarn.timeline-service.entity-group-fs-store.active-dir" : "/ats/active/",
           "yarn.log.server.web-service.url" : "http://%HOSTGROUP::host_group_3%:8188/ws/v1/applicationhistory",
           "yarn.nodemanager.linux-container-executor.group" : "hadoop",
           "yarn.client.failover-proxy-provider" : "org.apache.hadoop.yarn.client.RequestHedgingRMFailoverProxyProvider",
-          "yarn.application.classpath" : "{{hadoop_home}}/conf,{{hadoop_home}}/*,{{hadoop_home}}/lib/*,/usr/hdp/current/hadoop-hdfs-client/*,/usr/hdp/current/hadoop-hdfs-client/lib/*,/usr/hdp/current/hadoop-yarn-client/*,/usr/hdp/current/hadoop-yarn-client/lib/*,/usr/hdp/current/ext/hadoop/*,/usr/hdp/current/spark2-client/aux/*",
+          "yarn.application.classpath" : "{{hadoop_home}}/conf,{{hadoop_home}}/*,{{hadoop_home}}/lib/*,/usr/hdp/current/hadoop-hdfs-client/*,/usr/hdp/current/hadoop-hdfs-client/lib/*,/usr/hdp/current/hadoop-yarn-client/*,/usr/hdp/current/hadoop-yarn-client/lib/*,/usr/hdp/current/ext/hadoop/*",
           "yarn.nodemanager.kill-escape.launch-command-line" : "slider-agent,LLAP",
           "yarn.admin.acl" : "activity_analyzer,yarn",
           "yarn.timeline-service.entity-group-fs-store.cleaner-interval-seconds" : "3600",
@@ -180,47 +187,43 @@
         }
       }
     },
- {
+    {
+      "mapred-site" : {
+        "properties_attributes" : { },
+        "properties" : {
+          "yarn.app.mapreduce.am.resource.mb" : "2048",
+		  "mapreduce.map.memory.mb" : "2048",
+		  "mapreduce.task.io.sort.mb" : "1024",
+		  "mapreduce.map.java.opts" : "-Xmx1638m",
+		  "mapreduce.reduce.memory.mb" : "4096",
+		  "mapreduce.reduce.java.opts" : "-Xmx3276m"
+        }
+      }
+    },
+    {
       "hive-site" : {
         "properties" : {
           "javax.jdo.option.ConnectionDriverName" : "com.mysql.jdbc.Driver",
           "javax.jdo.option.ConnectionURL" : "jdbc:mysql://hdp-db01.gombe.com:3306/metastore",
-          "javax.jdo.option.ConnectionUserName": "hive"
+          "javax.jdo.option.ConnectionUserName": "hive",
+		  "hive.zookeeper.quorum" : "%HOSTGROUP::host_group_3%:2181,%HOSTGROUP::host_group_4%:2181,%HOSTGROUP::host_group_5%:2181",
+          "hive.metastore.kerberos.principal" : "hive/_HOST@EXAMPLE.COM"
         }
       }
- },
- {
-      "mapred-site" : {
-        "properties" : {
-		 "yarn.app.mapreduce.am.resource.mb" : "1024",
-		 "mapreduce.map.memory.mb" : "1024",
-		 "mapreduce.task.io.sort.mb" : "573"
-		    }
-        }
- },
- {
+    },
+    {
       "hive-env" : {
+        "properties_attributes" : { },
         "properties" : {
           "hive_database" : "Existing MySQL Database",
-          "hive_database_name" : "metastore",
-          "hive_database_type" : "mysql",
-          "hive_hostname" : "%HOSTGROUP::host_group_5%"
-        }
-      }
- },
- {
- "hbase-site" : 
-		{
-			"properties_attributes" : { },
-			"properties" : {
-			"hbase.rootdir" : "hdfs://hdpspark/apps/hbase/data",
-			"hbase.zookeeper.quorum" : "%HOSTGROUP::host_group_3%:2181,%HOSTGROUP::host_group_4%:2181,%HOSTGROUP::host_group_5%:2181"
-			}
+		  "hive_database_name" : "metastore",
+		  "hive_database_type" : "mysql",
+		  "hive_hostname" : "%HOSTGROUP::host_group_5%"
 		}
- }
-],
-
-"host_groups" : [
+      }
+    }
+  ],
+  "host_groups" : [
     {
       "components" : [
         {
@@ -230,62 +233,7 @@
           "name" : "HDFS_CLIENT"
         },
         {
-          "name" : "SPARK2_CLIENT"
-        },
-		{
-          "name" : "INFRA_SOLR_CLIENT"
-        },
-        {
-          "name" : "METRICS_MONITOR"
-        },
-        {
-          "name" : "TEZ_CLIENT"
-        },
-        {
-          "name" : "ZOOKEEPER_CLIENT"
-        },
-        {
-          "name" : "HCAT"
-        },
-        {
-          "name" : "PIG"
-        },
-        {
-          "name" : "HST_AGENT"
-        },
-        {
-          "name" : "MAPREDUCE2_CLIENT"
-        },
-        {
-          "name" : "SLIDER"
-        },
-        {
-          "name" : "HBASE_CLIENT"
-        },
-        {
-          "name" : "HIVE_CLIENT"
-        },
-        {
-          "name" : "METRICS_COLLECTOR"
-        },
-		{
-          "name": "SQOOP"
-        },
-		{
-          "name" : "METRICS_GRAFANA"
-        }
-      ],
-      "configurations" : [ ],
-      "name" : "host_group_1",
-      "cardinality" : "1"
-    },
-	{
-      "components" : [
-        {
-          "name" : "YARN_CLIENT"
-        },
-        {
-          "name" : "HDFS_CLIENT"
+          "name" : "SQOOP"
         },
         {
           "name" : "SPARK2_CLIENT"
@@ -327,11 +275,33 @@
           "name" : "HIVE_CLIENT"
         },
         {
+          "name" : "METRICS_COLLECTOR"
+        },
+        {
+          "name" : "METRICS_GRAFANA"
+        },
+        {
           "name" : "PHOENIX_QUERY_SERVER"
         }
       ],
       "configurations" : [ ],
       "name" : "host_group_2",
+      "cardinality" : "1"
+    },
+    {
+      "components" : [
+        {
+          "name" : "HST_AGENT"
+        },
+        {
+          "name" : "AMBARI_SERVER"
+        },
+        {
+          "name" : "METRICS_MONITOR"
+        }
+      ],
+      "configurations" : [ ],
+      "name" : "host_group_1",
       "cardinality" : "1"
     },
     {
@@ -344,6 +314,9 @@
         },
         {
           "name" : "HST_SERVER"
+        },
+        {
+          "name" : "SPARK2_CLIENT"
         },
         {
           "name" : "SPARK2_THRIFTSERVER"
@@ -363,7 +336,6 @@
         {
           "name" : "SPARK2_JOBHISTORYSERVER"
         },
-       
         {
           "name" : "HST_AGENT"
         },
@@ -375,6 +347,9 @@
         },
         {
           "name" : "JOURNALNODE"
+        },
+        {
+          "name" : "LIVY2_SERVER"
         },
         {
           "name" : "PHOENIX_QUERY_SERVER"
@@ -396,16 +371,20 @@
           "name" : "ZKFC"
         },
         {
+          "name" : "HIVE_SERVER"
+        },
+        {
           "name" : "METRICS_MONITOR"
         },
-        
+        {
+          "name" : "HBASE_MASTER"
+        },
         {
           "name" : "NAMENODE"
         },
         {
           "name" : "TEZ_CLIENT"
         },
-        
         {
           "name" : "HST_AGENT"
         },
@@ -444,6 +423,9 @@
           "name" : "HDFS_CLIENT"
         },
         {
+          "name" : "SQOOP"
+        },
+        {
           "name" : "SPARK2_CLIENT"
         },
         {
@@ -473,7 +455,6 @@
         {
           "name" : "SLIDER"
         },
-        
         {
           "name" : "HBASE_REGIONSERVER"
         },
@@ -504,6 +485,9 @@
         },
         {
           "name" : "HIVE_SERVER"
+        },
+        {
+          "name" : "SPARK2_CLIENT"
         },
         {
           "name" : "HISTORYSERVER"
@@ -544,12 +528,11 @@
         {
           "name" : "JOURNALNODE"
         },
-        
+        {
+          "name" : "LIVY2_SERVER"
+        },
         {
           "name" : "HIVE_CLIENT"
-        },
-		{
-          "name": "SQOOP"
         },
         {
           "name" : "RESOURCEMANAGER"
@@ -560,9 +543,7 @@
       "cardinality" : "1"
     }
   ],
-    "Blueprints" : 
-  {
-	"blueprint_name": "hdpspark",
+    "Blueprints" : {
     "stack_name" : "HDP",
     "stack_version" : "2.6"
   }
