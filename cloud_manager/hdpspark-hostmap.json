@@ -1,0 +1,69 @@
+{
+  "blueprint" : "hdpspark",
+  "default_password" : "admin",
+  "configurations" : [
+    {
+      "hive-site" : {
+        "properties" : {
+          "javax.jdo.option.ConnectionPassword" : "bigdata"
+        }
+      }
+    }
+   ],
+  "host_groups" :[
+    {
+      "name" : "host_group_1",
+      "hosts" : [
+        {
+          "fqdn" : "hdp-an01.clouddatadojo.com"
+        }
+      ]
+    },
+	{
+      "name" : "host_group_3",
+      "hosts" : [
+        {
+          "fqdn" : "hdp-mn01.clouddatadojo.com"
+        }
+      ]
+    },
+    {
+      "name" : "host_group_4",
+      "hosts" : [
+        {
+          "fqdn" : "hdp-mn02.clouddatadojo.com"
+        }
+      ]
+    },
+    {  
+      "name" : "host_group_5",
+      "hosts" : [
+        {
+          "fqdn" : "hdp-mn03.clouddatadojo.com"
+        }
+      ]
+    },
+    {  
+      "name" : "host_group_2",
+      "hosts" : [
+        {
+          "fqdn" : "hdp-en01.clouddatadojo.com"
+        }
+      ]
+    },
+    {  
+      "name" : "host_group_6",
+      "hosts" : [
+        {
+          "fqdn" : "hdp-sn01.clouddatadojo.com"
+	},
+	{
+	  "fqdn" : "hdp-sn02.clouddatadojo.com"
+	},
+	{
+	  "fqdn" : "hdp-sn03.clouddatadojo.com"
+	}
+      ]
+    }
+  ]
+}

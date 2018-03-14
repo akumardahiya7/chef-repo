@@ -1,0 +1,22 @@
+127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
+::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
+
+
+#10.0.0.4        adPDC.clouddatadojo.com         adPDC
+
+
+10.13.1.4 jumpbox.clouddatadojo.com jumpbox
+
+10.13.1.18 hdp-db01.clouddatadojo.com hdp-db01 
+
+10.13.1.21 hdp-an01.clouddatadojo.com hdp-an01 
+10.13.1.22 hdp-en01.clouddatadojo.com hdp-en01 
+
+
+10.13.1.14 hdp-mn01.clouddatadojo.com hdp-mn01 
+10.13.1.19 hdp-mn02.clouddatadojo.com hdp-mn02 
+10.13.1.16 hdp-mn03.clouddatadojo.com hdp-mn03 
+
+10.13.1.20 hdp-sn01.clouddatadojo.com hdp-sn01 
+10.13.1.15 hdp-sn02.clouddatadojo.com hdp-sn02 
+10.13.1.17 hdp-sn03.clouddatadojo.com hdp-sn03 

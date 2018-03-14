@@ -8,6 +8,14 @@ yum_package 'ntp' do
 	action :install
 end
 
+yum_package 'curl' do
+	action :install
+end
+
+yum_package 'wget' do
+	action :install
+end
+
 service 'ntpd' do
 	action [ :enable, :start ]  
 end
@@ -22,6 +30,15 @@ cookbook_file "/etc/python/cert-verification.cfg" do
   group 'root'
   mode '0644'
 end
+
+cookbook_file "/etc/krb5.conf" do
+  source 'krb5.conf'
+  owner 'root'
+  group 'root'
+  mode '0644'
+end
+
+
 
 search(:users, '*:*').each do |u|
   directory "/home/#{u['id']}/.ssh" do

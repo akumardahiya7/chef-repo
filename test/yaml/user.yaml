@@ -1,0 +1,13 @@
+-users:
+    -joe
+    - mike
+    - sally
+ 
+-path:
+    - /Users/me/files/
+    - text.files
+ 
+-search_phrases:
+    - Invalid users
+    - Failed password
+

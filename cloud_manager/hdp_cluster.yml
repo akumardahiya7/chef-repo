@@ -1,0 +1,26 @@
+cluster:
+    name: hdpspark
+    blueprint: hdpspark.json
+    hostmap: hdpspark-hostmap.json 
+    ssh: 
+        username: cddadmin
+        privkey: cluster-ssh-privkey 
+    ambari:
+        host: hdp-an01.clouddatadojo.com 
+        username: admin 
+        passwd: admin 
+        database:
+           type: mysql
+           host: hdp-db01.clouddatadojo.com 
+           port: 3306 
+           name: ambari 
+           username: ambari 
+           passwd: bigdata 
+    nodes: 
+        - hdp-en01.clouddatadojo.com 
+        - hdp-mn01.clouddatadojo.com 
+        - hdp-mn02.clouddatadojo.com 
+        - hdp-mn03.clouddatadojo.com 
+        - hdp-sn01.clouddatadojo.com 
+        - hdp-sn02.clouddatadojo.com 
+        - hdp-sn03.clouddatadojo.com 
