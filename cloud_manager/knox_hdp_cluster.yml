@@ -1,7 +1,7 @@
 cluster:
     name: hdpspark
-    blueprint: hdpspark.json 
-    hostmap: hdpspark-hostmap.json 
+    blueprint: knox-azure-cluster.json
+    hostmap: knox-azure-hostmap.json 
     ssh: 
         username: cddadmin
         privkey: cluster-ssh-privkey 

@@ -154,9 +154,27 @@ class cluster_init(object):
 		#print "\nHDP Cluster Ambari Server database password: " + cluster.ambari_db_passwd
 
 
-		logging.info("\nHDP Cluster Nodes are:") 
+		logging.info("\nHDP Cluster Nodes:") 
 
 		logging.info(cluster.config['cluster']['nodes'])
+
+
+		if ('ranger' in cluster.config['cluster']) == True:
+			cluster.ranger_lb = cluster.config['cluster']['ranger']['lb']
+			logging.info("\nRanger load balancer: " + cluster.ranger_lb)
+
+			logging.info("Ranger Nodes:") 
+			logging.info(cluster.config['cluster']['ranger']['nodes'])
+
+
+		if ('knox' in cluster.config['cluster']) == True:
+			cluster.knox_lb = cluster.config['cluster']['knox']['lb']
+			logging.info("\nKnox load balancer: " + cluster.knox_lb)
+
+			logging.info("Knox Nodes:") 
+			logging.info(cluster.config['cluster']['knox']['nodes'])
+
+
 
 		if ('kerberos' in cluster.config['cluster']) == True:
 			cluster.kerberos_conf = cluster.config['cluster']['kerberos']['conf']
@@ -177,6 +195,7 @@ class cluster_init(object):
 				logging.error("Error: %s KERBEROS Principal file contains invalid JSON Format")
 				return ret
 
+	
 		return ret
 
 	def hdp_ambari_configure(cluster, manager):
@@ -360,6 +379,224 @@ class cluster_init(object):
 
 		logging.info("\nSuccessfully installed HDP Cluster")
 		return 0
+
+	def hdp_knox_node_setup(cluster, node):
+		'''
+		Configure all knox nodes with hdp-knox role 
+
+		Example:
+		knife bootstrap -i ~/cluster-ssh-privkey -x cddadmin --sudo -r role['ambari-agent'] hdp-en01
+		'''
+		ret = 0
+		logging.info("Configuring Knox node: " + str(node) + " ...")
+
+
+		# update role
+		role = "role['hdp-knox']"
+		cmd = "knife node run_list add " + node + " " +  role 
+		ret = cluster.shell_cmd_exec(cmd)
+		if ret < 0:
+			logging.error("Error: Could not update knox role for node: %s", node)
+			return -1
+		logging.debug("Successfully configured knox role for node: " + str(node)) 
+		return 0
+
+
+
+	def hdp_knox_nodes_setup(cluster, manager):
+		'''
+		config knox
+		
+		'''
+		ret = 0
+		logging.info("\nConfigure Knox nodes ...")
+
+		count = 0 
+		num = 0 
+		for node in cluster.config['cluster']['knox']['nodes']: 
+			num = num + 1
+			ret = cluster.hdp_knox_node_setup(node)
+			if ret == 0:
+				count = count + 1
+
+		# log error based up on how many hdp nodes being configured
+		if count == 0:
+			logging.error("Error: Could not configure Knox on any HDP node")
+			return -1
+
+		if count != num:
+			logging.warning("Warning: Successfully configured Knox only on %d node(s) out of %d node(s)", count, num)
+			return 0
+
+
+		# run chef-client
+		cmd = 'knife ssh "role:hdp-knox" "sudo chef-client"' 
+		ret = cluster.shell_cmd_exec(cmd)
+		if ret < 0:
+			logging.error("Error: Could not configure Ranger node: %s", node)
+			return -1
+
+		logging.info("Successfully configured Knox")
+		return 0
+
+
+	def hdp_knox_haproxy_setup(cluster, manager):
+		'''
+		Configure HA proxy for knox  
+
+		'''
+		ret = 0
+		logging.info("Configuring knox HA-Proxy load-balancer on node: " + str(node) + " ...")
+
+
+		# update role
+		role = "role['ha-proxy']"
+		cmd = "knife node run_list add " + node + " " +  role 
+		ret = cluster.shell_cmd_exec(cmd)
+		if ret < 0:
+			logging.error("Error: Could not update HA-Proxy role for node: %s", node)
+			return -1
+		logging.debug("Successfully configured Ha-Proxy role for node: " + str(node)) 
+
+		# run chef-client
+		cmd = 'knife ssh "name:"' + node + '"' \
+				+ "'sudo chef-client'" \
+				+ " -i " + cluster.ssh_key \
+				+ " -x " + cluster.username \
+				+ " " + node  
+		ret = cluster.shell_cmd_exec(cmd)
+		if ret < 0:
+			logging.error("Error: Could not configure Knox HA-Proxy load-balancer on node: %s", node)
+			return -1
+
+		logging.info("Successfully configured Knox HA-Proxy load-balancer on node: " + str(node)) 
+		return 0
+
+
+	def hdp_knox_setup(cluster, manager):
+		'''
+		setting up knox on nodes
+		'''
+
+		ret = 0 
+#		ret = cluster.hdp_knox_haproxy_setup(manager)
+#		if ret < 0:
+#			return ret
+
+		ret = cluster.hdp_knox_nodes_setup(manager)
+		if ret < 0:
+			return ret
+
+
+
+	def hdp_ranger_node_setup(cluster, node):
+		'''
+		Configure all Ranger nodes with hdp-ranger role 
+
+		Example:
+
+		knife ssh "role:hdp-ranger" "sudo chef-client"
+		'''
+		ret = 0
+		logging.info("Configuring Ranger node: " + str(node) + " ...")
+
+
+		# update role
+		role = "role['hdp-ranger']"
+		cmd = "knife node run_list add " + node + " " +  role 
+		ret = cluster.shell_cmd_exec(cmd)
+		if ret < 0:
+			logging.error("Error: Could not update Ranger role for node: %s", node)
+			return -1
+		logging.debug("Successfully configured Ranger role for node: " + str(node)) 
+
+		# run chef-client
+		cmd = 'knife ssh "role:hdp-ranger" "sudo chef-client"' 
+		ret = cluster.shell_cmd_exec(cmd)
+		if ret < 0:
+			logging.error("Error: Could not configure Ranger node: %s", node)
+			return -1
+
+		logging.info("Successfully configured Ranger node: " + str(node)) 
+		return 0
+
+
+	def hdp_ranger_nodes_setup(cluster, manager):
+		'''
+		config ranger
+		
+		'''
+		logging.info("\nConfigure Ranger nodes ...")
+
+		for node in cluster.config['cluster']['ranger']['nodes']: 
+			ret = cluster.hdp_ranger_node_setup(node)
+			# log error based up on how many hdp nodes being configured
+			if ret < 0:
+				logging.error("Error: Could not configure Ranger")
+				return -1
+
+			logging.info("Successfully configured Ranger")
+			return 0
+
+
+	def hdp_ranger_haproxy_setup(cluster, manager):
+		'''
+		Configure HA proxy for Ranger  
+
+		'''
+		ret = 0
+		node = cluster.knox_lb
+		logging.info("Configuring Ranger HA-Proxy load-balancer on node: " + str(node) + " ...")
+
+
+		# update role
+		role = "role['ha-proxy']"
+		#cmd = "knife node run_list add " + node + " " +  role 
+		cmd = "knife bootstrap --sudo " \
+				+ " -i " + cluster.ssh_key \
+				+ " -x " + cluster.username \
+				+ " -r " + role \
+				+ " " + node
+				
+	
+		ret = cluster.shell_cmd_exec(cmd)
+		if ret < 0:
+			logging.error("Error: Could not update HA-Proxy role for node: %s", node)
+			return -1
+		logging.debug("Successfully configured Ha-Proxy role for node: " + str(node)) 
+		return 0
+
+		# run chef-client
+#		cmd = 'knife ssh "name:"' + node + '"' \
+##				+ "'sudo chef-client'" \
+#				+ " -i " + cluster.ssh_key \
+#				+ " -x " + cluster.username \
+#				+ " " + node  
+#		ret = cluster.shell_cmd_exec(cmd)
+#		if ret < 0:
+#			logging.error("Error: Could not configure Ranger HA-Proxy load-balancer on node: %s", node)
+#			return -1
+
+#		logging.info("Successfully configured Ranger HA-Proxy load-balancer on node: " + str(node)) 
+#		return 0
+
+
+	def hdp_ranger_setup(cluster, manager):
+		'''
+		setting up ranger on nodes
+		'''
+
+		ret = 0 
+	#	ret = cluster.hdp_ranger_haproxy_setup(manager)
+	#	if ret < 0:
+	#		return ret
+
+		ret = cluster.hdp_ranger_nodes_setup(manager)
+		if ret < 0:
+			return ret
+
+
+
 
 	def hdp_kerberose_conf(cluster, manager):
 		'''
@@ -1035,6 +1272,8 @@ class azure_hdp_manager_init(object):
 			logging.error("Error: Invalid HDP Cluster YAML config file")
 			return ret
 
+		#return 0
+
 		if manager.args.hdp_install is True:
 			logging.info("\nHDP cluster installation started ...")
 			ret = cluster.hdp_ambari_configure(manager)
@@ -1057,6 +1296,24 @@ class azure_hdp_manager_init(object):
 			if ret < 0:
 				return ret
 
+#		if ('ranger' in cluster.config['cluster']) == True:
+#			ret = cluster.hdp_ranger_haproxy_setup(manager)
+#			if ret < 0:
+#				return ret
+
+
+#			if ('ranger' in cluster.config['cluster']) == True:
+#				ret = cluster.hdp_ranger_setup(manager)
+#				if ret < 0:
+#					return ret
+#
+#			if ('knox' in cluster.config['cluster']) == True:
+#				ret = cluster.hdp_knox_setup(manager)
+#				if ret < 0:
+#					return ret
+
+
+
 		if manager.args.kerberos_install is True:
 			logging.info("\nHDP kerberization process has been started ...")
 			time.sleep( 10 )
@@ -1077,8 +1334,8 @@ if __name__ == '__main__':
 	''' main entry point '''
 
 	ret = 0
-	logging.basicConfig(format='%(message)s', level=logging.INFO)
-	#logging.basicConfig(format='%(message)s', level=logging.DEBUG)
+	#logging.basicConfig(format='%(message)s', level=logging.INFO)
+	logging.basicConfig(format='%(message)s', level=logging.DEBUG)
 	#logging.basicConfig(filename='/tmp/cloudmanager.log', format='%(asctime)s %(message)s', filemode='w', level=logging.DEBUG)
 	sys.stdout = os.fdopen(sys.stdout.fileno(), 'w', 0)
 	res = ''

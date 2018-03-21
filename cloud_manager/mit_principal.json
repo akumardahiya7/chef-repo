@@ -1,7 +1,7 @@
 {
   "session_attributes" : {
     "kerberos_admin" : {
-      "principal" : "admin/admin@HASHWALMS.COM",
+      "principal" : "admin/admin@WALGREENS.COM",
       "password" : "Hashmap@123"
     }
   },

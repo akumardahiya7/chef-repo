@@ -47,6 +47,7 @@ rm -rf /var/run/falcon
 rm -rf /var/log/falcon
 rm -f /usr/bin/falcon
 userdel -r falcon
+groupdel falcon
 
 #ganglia
 yum -y remove "ganglia*"
@@ -58,6 +59,7 @@ rm -rf /var/run/hbase
 rm -rf /var/log/hbase
 rm -f /usr/bin/hbase
 userdel -r hbase
+groupdel hbase
 
 #hdfs
 yum -y remove hdfs\*
@@ -69,6 +71,7 @@ rm -rf /var/run/hadoop
 rm -rf /var/log/hadoop
 rm -f /usr/bin/hdfs
 userdel -r hdfs
+groupdel hdfs
 
 #hive & hive2
 yum -y remove hive\*
@@ -96,12 +99,16 @@ rm -f /usr/bin/hiveserver2
 rm -f /usr/bin/hcat
 
 userdel -r hcat
+groupdel hcat
+
 userdel -r hive
+groupdel hive
 
 #kafka
 yum -y remove kafka\*
 rm -f /usr/bin/kafka
 userdel -r kafka
+groupdel kafka
 
 #knox
 yum -y remove knox\*
@@ -110,6 +117,7 @@ rm -rf /var/lib/knox
 rm -rf /var/run/knox
 rm -rf /var/log/knox
 userdel -r knox
+groupdel knox
 
 ##mapred
 yum -y remove mapreduce2\*
@@ -118,6 +126,7 @@ rm -rf /var/run/hadoop-mapreduce
 rm -rf /var/log/hadoop-mapreduce
 rm -f /usr/bin/mapred
 userdel -r mapred
+groupdel mapred
 
 #hst
 rm -rf /var/log/hst
@@ -136,6 +145,20 @@ rm -rf /var/log/oozie
 rm -f /usr/bin/oozie
 rm -f /usr/bin/oozied.sh
 userdel -r oozie
+groupdel oozie
+
+rm -f /etc/oozie/conf
+yum -y remove oozie\*
+
+#RET=-1
+#while [ $RET -ne 0 ]
+#do
+#        yum -y remove oozie\*
+#        RET=$?
+#        echo "oozie  remove ret =$RET"
+#done
+
+
 
 #pig
 yum -y remove pig\*
@@ -154,7 +177,14 @@ rm -f /usr/bin/ranger-kms
 rm -f /usr/bin/ranger-usersync
 rm -f /usr/bin/ranger-usersync-start
 rm -f /usr/bin/ranger-usersync-stop
+rm -rf /etc/ranger-tagsync
+rm -f /usr/bin/ranger-tagsync
+rm -rf /var/lib/ranger
+rm -rf /var/log/ranger
+rm -rf /etc/ranger
+rm -f /run/ranger
 userdel -r ranger
+groupdel ranger
 
 #spark2
 yum -y remove spark\*
@@ -162,6 +192,7 @@ rm -rf /etc/spark*
 rm -rf /var/log/spark*
 rm -rf /var/run/spark*
 userdel -r spark
+groupdel spark
 
 #storm
 yum -y remove storm\*
@@ -171,6 +202,7 @@ rm -rf /var/lib/storm
 rm -f /usr/bin/storm
 rm -f /usr/bin/storm-slider
 userdel -r storm
+groupdel storm
 
 #tez
 yum -y remove tez\*
@@ -179,6 +211,7 @@ rm -rf /etc/tez_hive2
 rm -rf /var/run/tez
 rm -rf /var/log/tez
 userdel -r tez
+groupdel tez
 
 #yarn
 yum -y remove yarn\*
@@ -187,6 +220,7 @@ rm -rf /var/run/hadoop-yarn
 rm -rf /var/log/hadoop-yarn
 rm -f /usr/bin/yarn
 userdel -r yarn
+groupdel yarn
 
 #zookeeper
 yum -y remove zookeeper\*
@@ -197,6 +231,7 @@ rm -f /usr/bin/zookeeper-client
 rm -f /usr/bin/zookeeper-server
 rm -f /usr/bin/zookeeper-server-cleanup
 userdel -r zookeeper
+groupdel zookeeper
 
 #smartsense
 yum -y remove smartsense\*
@@ -209,6 +244,7 @@ rm -rf /etc/smartsense*
 yum -y remove accumulo\*
 rm -f /usr/bin/accumulo
 userdel -r accumulo
+groupdel accumulo
 
 #slider
 yum -y remove slider\*
@@ -231,6 +267,7 @@ rm -rf /var/lib/ambari-metrics*
 rm -rf /var/run/ambari-metrics*
 rm -rf /var/log/ambari-metrics*
 userdel -r ams
+groupdel ams
 
 
 #ambari-infra-solr
@@ -243,6 +280,7 @@ rm -rf /var/log/solr
 
 
 userdel -r ambari-qa
+groupdel ambari-qa
 
 
 #livy
@@ -267,6 +305,7 @@ rm -f /usr/bin/phoenix-queryserver
 rm -f /usr/bin/phoenix-sqlline
 rm -f /usr/bin/phoenix-sqlline-thin
 userdel -r zeppelin
+groupdel zeppelin
 
 
 
@@ -278,6 +317,7 @@ rm -rf /var/run/flume
 rm -rf /var/log/flume
 rm -f /usr/bin/flume-ng
 userdel -r flume
+groupdel flume
 
 #sqoop
 rm -f /usr/bin/sqoop
@@ -301,6 +341,7 @@ rm -rf /var/log/sqoop
 
 
 userdel -r sqoop
+groupdel sqoop
 
 
 #Remove repositories on all nodes
@@ -353,6 +394,8 @@ rm -f /usr/bin/python-wrap
 
 rm -f /usr/bin/worker-lanucher
 
+#remove kerberos keytab
+rm -rf /etc/security/keytabs
 
 #removed /tmp folder
 rm -rf /tmp/*
