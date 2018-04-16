@@ -66,9 +66,9 @@ yum -y remove hdfs\*
 rm -rf /etc/hadoop
 rm -rf /etc/hadoop-httpfs
 
-rm -rf /var/lib/hadoop-hdfs
-rm -rf /var/run/hadoop 
-rm -rf /var/log/hadoop
+rm -rf /var/lib/hadoop*
+rm -rf /var/run/hadoop*
+rm -rf /var/log/hadoop*
 rm -f /usr/bin/hdfs
 userdel -r hdfs
 groupdel hdfs
@@ -142,6 +142,7 @@ yum -y remove oozie\*
 rm -rf /etc/oozie
 rm -rf /var/run/oozie 
 rm -rf /var/log/oozie
+rm -rf /var/lib/oozie
 rm -f /usr/bin/oozie
 rm -f /usr/bin/oozied.sh
 userdel -r oozie
@@ -181,6 +182,7 @@ rm -rf /etc/ranger-tagsync
 rm -f /usr/bin/ranger-tagsync
 rm -rf /var/lib/ranger
 rm -rf /var/log/ranger
+rm -rf /var/run/ranger
 rm -rf /etc/ranger
 rm -f /run/ranger
 userdel -r ranger
@@ -225,6 +227,7 @@ groupdel yarn
 #zookeeper
 yum -y remove zookeeper\*
 rm -rf /etc/zookeeper
+rm -rf /var/lib/zookeeper
 rm -rf /var/run/zookeeper
 rm -rf /var/log/zookeeper
 rm -f /usr/bin/zookeeper-client

@@ -1,0 +1,107 @@
+{
+  "blueprint" : "hdpspark",
+  "default_password" : "admin",
+  "configurations" : [
+    {
+      "hive-site" : {
+        "properties" : {
+          "javax.jdo.option.ConnectionPassword" : "bigdata"
+        }
+      }
+    },
+	{
+      "oozie-site" : {
+        "properties" : {
+          "oozie.service.JPAService.jdbc.password" : "bigdata"
+        }
+      }
+    },
+	{
+      "admin-properties" : {
+        "properties" : {
+          "db_password" : "bigdata",
+		  "db_root_password": "bigdata",
+		  "audit_db_password": "bigdata"
+        }
+      }
+    },
+	{
+      "ranger-env": {
+        "properties": {
+          "admin_password": "admin",
+		  "ranger_admin_password": "bigdata12"
+        }
+      }
+    },
+	{
+      "ranger-ugsync-site": {
+        "properties": {
+          "ranger.usersync.truststore.password": "Hashmap@123",
+		  "ranger.usersync.ldap.ldapbindpassword": "Hashmap@123"
+        }
+      }
+    }
+   ],
+  "host_groups" :[
+    {
+      "name" : "host_group_1",
+      "hosts" : [
+        {
+          "fqdn" : "hdp-an01.cloudatadojo.com"
+        }
+      ]
+    },
+	{
+      "name" : "host_group_3",
+      "hosts" : [
+        {
+          "fqdn" : "hdp-mn01.cloudatadojo.com"
+        }
+      ]
+    },
+    {
+      "name" : "host_group_4",
+      "hosts" : [
+        {
+          "fqdn" : "hdp-mn02.cloudatadojo.com"
+        }
+      ]
+    },
+    {  
+      "name" : "host_group_5",
+      "hosts" : [
+        {
+          "fqdn" : "hdp-mn03.cloudatadojo.com"
+        }
+      ]
+    },
+    {  
+      "name" : "host_group_2",
+      "hosts" : [
+        {
+          "fqdn" : "hdp-en01.cloudatadojo.com"
+        }
+      ]
+    },
+    {  
+      "name" : "host_group_6",
+      "hosts" : [
+        {
+          "fqdn" : "hdp-sn01.cloudatadojo.com"
+		}
+	  ]
+    },
+	{  
+      "name" : "host_group_7",
+      "hosts" : [
+        {
+		  "fqdn" : "hdp-sn02.cloudatadojo.com"
+		},
+		{
+		  "fqdn" : "hdp-sn03.cloudatadojo.com"
+		}
+        
+      ]
+    }
+  ]
+}

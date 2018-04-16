@@ -19,9 +19,7 @@
 	{
       "admin-properties" : {
         "properties" : {
-          "db_password" : "bigdata",
-          "db_root_password": "bigdata",
-          "audit_db_password": "bigdata"
+          "db_password" : "bigdata"
 		}
       }
     },
@@ -29,7 +27,7 @@
       "ranger-env": {
         "properties": {
           "admin_password": "admin",
-	  "ranger_admin_password": "bigdata12"
+		  "ranger_admin_password": "admin"
         }
       }
     },
@@ -39,6 +37,13 @@
           "ranger.usersync.truststore.password": "Hashmap@123",
 		  "ranger.usersync.ldap.ldapbindpassword": "Hashmap@123"
         }
+      }
+    },
+	{
+      "knox-env": {
+        "properties": {
+          "knox_master_secret": "bigdata"
+		}
       }
     }
    ],

@@ -1,0 +1,40 @@
+cluster:
+    name: hdpspark
+    blueprint: /home/cddadmin/prabhjot/multinode/knox-ranger-kms-cluster.json 
+    hostmap: /home/cddadmin/prabhjot/multinode/knox-ranger-kms-hostmap.json
+    ssh: 
+        username: cddadmin
+        privkey: cluster-ssh-privkey 
+    ambari:
+        host: hdp-an01.clouddatadojo.com 
+        username: admin 
+        passwd: admin 
+        database:
+           type: mysql
+           host: hdp-db01.clouddatadojo.com 
+           port: 3306 
+           name: ambari 
+           username: ambari 
+           passwd: bigdata 
+    nodes: 
+        - hdp-en01.clouddatadojo.com 
+        - hdp-mn01.clouddatadojo.com 
+        - hdp-mn02.clouddatadojo.com 
+        - hdp-mn03.clouddatadojo.com 
+        - hdp-sn01.clouddatadojo.com 
+        - hdp-sn02.clouddatadojo.com 
+        - hdp-sn03.clouddatadojo.com 
+
+    ranger:
+        lb: hdp-an01.clouddatadojo.com 
+        nodes: 
+          - hdp-mn01.clouddatadojo.com 
+          - hdp-mn02.clouddatadojo.com 
+    knox:
+        lb: hdp-an01.clouddatadojo.com 
+        nodes: 
+          - hdp-an01.clouddatadojo.com 
+          - hdp-en01.clouddatadojo.com 
+    kerberos: 
+        conf: mit.json
+        principal: mit_principal.json

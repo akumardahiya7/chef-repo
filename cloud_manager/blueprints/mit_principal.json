@@ -1,0 +1,11 @@
+{
+  "session_attributes" : {
+    "kerberos_admin" : {
+      "principal" : "admin/admin@WALGREENS.COM",
+      "password" : "Hashmap@123"
+    }
+  },
+  "Clusters": {
+    "security_type" : "KERBEROS"
+  }
+}
